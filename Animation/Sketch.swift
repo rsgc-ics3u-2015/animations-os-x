@@ -42,7 +42,7 @@ class Sketch {
         // Clear the background
         c.drawShapesWithBorders = false
         c.fillColor = Color(hue: 0, saturation: 0, brightness: 100, alpha: 100)
-        c.drawRectangle(bottomRightX: 0, bottomRightY: 0, width: 480, height: 270)
+        c.drawRectangle(bottomRightX: 0, bottomRightY: 0, width: c.width, height: c.height)
         
         // Draw a circle that moves across the screen
         c.drawShapesWithBorders = false

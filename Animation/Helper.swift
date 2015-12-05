@@ -112,17 +112,25 @@ public class Color {
     // whether to draw shapes with fill
     public var drawShapesWithFill: Bool = true
     
+    // size of canvas
+    public var width : Int
+    public var height : Int
+    
     // Initialization of object based on this class
     public init(width: Int, height: Int) {
         
+        // Set the width and height of the sketch
+        self.width = width
+        self.height = height
+        
         // Create the frame
-        let frameRect = NSRect(x: 0, y: 0, width: width, height: height)
+        let frameRect = NSRect(x: 0, y: 0, width: self.width, height: self.height)
         
         // Set the view, or canvas, to place an image on
         self.canvas = NSImageView(frame: frameRect)
         
         // Define the size of the image, or 'canvas', we want to use
-        let mySize = NSMakeSize(CGFloat(width), CGFloat(height))
+        let mySize = NSMakeSize(CGFloat(self.width), CGFloat(self.height))
         
         // Create the blank image that will be painted on the canvas
         let myImage = NSImage(size: mySize)
