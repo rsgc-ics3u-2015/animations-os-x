@@ -19,7 +19,7 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         // Initialize the timer used to drive the sketch
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.016, target: self, selector: Selector("timedDraw"), userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(1/Double(sketch.fps), target: self, selector: Selector("timedDraw"), userInfo: nil, repeats: true)
         
     }
 

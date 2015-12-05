@@ -12,7 +12,7 @@ class Sketch {
 
     // Declare variables and constants to be used by methods below here
     var c : Canvas
-    var fps : Int = 60
+    var fps : Int = 1
     var frameCount = 0
     var x = 0
     var s = 1
