@@ -34,7 +34,6 @@ class ViewController: NSViewController {
         
         // Keep track of how many frames drawn
         frameCount++
-        print(frameCount)
         
         // Draw a rectangle with no fill
         c.drawShapesWithBorders = false
