@@ -12,6 +12,7 @@
 		81064A0E1C130A10007ED524 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81064A0D1C130A10007ED524 /* Assets.xcassets */; };
 		81064A111C130A10007ED524 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81064A0F1C130A10007ED524 /* Main.storyboard */; };
 		81064A191C130B10007ED524 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81064A181C130B10007ED524 /* Helper.swift */; };
+		81064A1C1C132DA2007ED524 /* Sketch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81064A1B1C132DA2007ED524 /* Sketch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		81064A101C130A10007ED524 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		81064A121C130A10007ED524 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81064A181C130B10007ED524 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		81064A1B1C132DA2007ED524 /* Sketch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sketch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,15 @@
 		81064A081C130A10007ED524 /* Animation */ = {
 			isa = PBXGroup;
 			children = (
+				81064A1B1C132DA2007ED524 /* Sketch.swift */,
+				81064A1A1C132D69007ED524 /* Support */,
+			);
+			path = Animation;
+			sourceTree = "<group>";
+		};
+		81064A1A1C132D69007ED524 /* Support */ = {
+			isa = PBXGroup;
+			children = (
 				81064A091C130A10007ED524 /* AppDelegate.swift */,
 				81064A0B1C130A10007ED524 /* ViewController.swift */,
 				81064A0D1C130A10007ED524 /* Assets.xcassets */,
@@ -61,7 +72,7 @@
 				81064A121C130A10007ED524 /* Info.plist */,
 				81064A181C130B10007ED524 /* Helper.swift */,
 			);
-			path = Animation;
+			name = Support;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81064A0C1C130A10007ED524 /* ViewController.swift in Sources */,
+				81064A1C1C132DA2007ED524 /* Sketch.swift in Sources */,
 				81064A0A1C130A10007ED524 /* AppDelegate.swift in Sources */,
 				81064A191C130B10007ED524 /* Helper.swift in Sources */,
 			);
@@ -277,6 +289,7 @@
 				81064A171C130A10007ED524 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

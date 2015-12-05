@@ -56,7 +56,11 @@ public class Color {
     public init(hue: Float, saturation: Float, brightness: Float, alpha: Float) {
         
         // Set with provided values
-        self.hue = hue
+        if (hue > 360) {
+            self.hue = hue % 360
+        } else {
+            self.hue = hue
+        }
         self.saturation = saturation
         self.brightness = brightness
         self.alpha = alpha
@@ -73,10 +77,10 @@ public class Color {
 @objc public class Canvas : NSObject {
     
     // Image view to be displayed
-    public var canvas: NSImageView
+    public var canvas: NSImageView = NSImageView()
     
     // line width
-    public var defaultLineWidth: Int {
+    public var defaultLineWidth: Int = 1 {
         didSet {
             if (defaultLineWidth < 0) {
                 defaultLineWidth = 1
@@ -85,10 +89,10 @@ public class Color {
     }
     
     // line color
-    public var lineColor: Color
+    public var lineColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     
     // border width for closed shapes
-    public var defaultBorderWidth: Int {
+    public var defaultBorderWidth: Int = 1 {
         didSet {
             if (defaultBorderWidth < 0) {
                 defaultBorderWidth = 0
@@ -97,18 +101,18 @@ public class Color {
     }
     
     // border color
-    public var borderColor: Color
+    public var borderColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     
     // fill color
-    public var fillColor: Color
+    public var fillColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     
     // whether to draw shapes with borders
-    public var drawShapesWithBorders: Bool
+    public var drawShapesWithBorders: Bool = true
     
     // whether to draw shapes with fill
-    public var drawShapesWithFill: Bool
+    public var drawShapesWithFill: Bool = true
     
-    
+    // Initialization of object based on this class
     public init(width: Int, height: Int) {
         
         // Create the frame
@@ -125,27 +129,6 @@ public class Color {
         
         // Set the image to be displayed on the canvas
         self.canvas.image = myImage
-        
-        // Set default line width for canvas
-        self.defaultLineWidth = 1
-        
-        // Set default border width for canvas
-        self.defaultBorderWidth = 1
-        
-        // Set default for drawing borders (on)
-        self.drawShapesWithBorders = true
-        
-        // Set default for drawing shapes will a fil (on)
-        self.drawShapesWithFill = true
-        
-        // Set the default line color to black
-        self.lineColor = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
-        
-        // Set the default border color to black
-        self.borderColor = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
-        
-        // Set the default fill color to black
-        self.fillColor = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
         
     }
     
