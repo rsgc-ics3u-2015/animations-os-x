@@ -172,8 +172,8 @@ public class Canvas : CustomPlaygroundQuickLookable {
     public var drawShapesWithFill: Bool = true
     
     // Size of canvas
-    public var width : Int
-    public var height : Int
+    public let width : Int
+    public let height : Int
     
     // Initialization of object based on this class
     public init(width: Int, height: Int) {
