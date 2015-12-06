@@ -12,7 +12,7 @@ class Sketch {
 
     // Declare variables and constants to be used by methods below here
     var c : Canvas
-    var fps : Int = 1
+    var fps : Int = 60
     var frameCount = 0
     var x = 0
     var s = 1
@@ -21,7 +21,7 @@ class Sketch {
     init() {
         
         // Create canvas object – specify size
-        c = Canvas(width: 480, height: 270)
+        c = Canvas(width: 700, height: 100)
         
     }
     
@@ -41,7 +41,7 @@ class Sketch {
         
         // Clear the background
         c.drawShapesWithBorders = false
-        c.fillColor = Color(hue: 0, saturation: 0, brightness: 100, alpha: 100)
+        c.fillColor = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
         c.drawRectangle(bottomRightX: 0, bottomRightY: 0, width: c.width, height: c.height)
         
         // Draw a circle that moves across the screen
