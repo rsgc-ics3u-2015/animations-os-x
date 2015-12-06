@@ -19,7 +19,7 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         // Initialize the timer used to drive the sketch
-        timer = NSTimer.scheduledTimerWithTimeInterval(1/Double(sketch.framesPerSecond), target: self, selector: Selector("timedDraw"), userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(1/Double(sketch.canvas.framesPerSecond), target: self, selector: Selector("timedDraw"), userInfo: nil, repeats: true)
         
     }
 
@@ -45,7 +45,7 @@ class ViewController: NSViewController {
         // Show the image from the canvas
         canvasView.image = nil
         canvasView.image = sketch.canvas.imageView.image
-            
+        
         
     }
     

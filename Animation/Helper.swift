@@ -120,6 +120,16 @@ public class Color {
 
 @objc public class Canvas : NSObject {
     
+    // Frame rate for animation on this canvas
+    var framesPerSecond : Int = 60 {
+        didSet {
+            // Ensure rational frame rate set
+            if (framesPerSecond < 0) {
+                framesPerSecond = 1
+            }
+        }
+    }
+    
     // Image view that will display our image
     public var imageView: NSImageView = NSImageView()
     
@@ -180,7 +190,7 @@ public class Color {
         
         // Create the blank image that will be presented in the image view
         let image = NSImage(size: imageSize)
-        
+                
         // Set this (currently blank) image so that it is displayed by the image view
         self.imageView.image = image
         
