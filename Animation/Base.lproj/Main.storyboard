@@ -57,11 +57,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Animation" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="282"/>
+                        <rect key="frame" x="0.0" y="0.0" width="511" height="282"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XvO-uh-N9F">
-                                <rect key="frame" x="0.0" y="0.0" width="400" height="282"/>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XvO-uh-N9F">
+                                <rect key="frame" x="0.0" y="0.0" width="511" height="282"/>
                                 <animations/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="tZP-wG-W4B"/>
                             </imageView>
@@ -69,6 +69,8 @@
                         <constraints>
                             <constraint firstItem="XvO-uh-N9F" firstAttribute="height" secondItem="m2S-Jp-Qdl" secondAttribute="height" id="CbU-Om-afv"/>
                             <constraint firstItem="XvO-uh-N9F" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="ni1-A4-bm7"/>
+                            <constraint firstItem="XvO-uh-N9F" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="vnp-zs-m4R"/>
+                            <constraint firstItem="XvO-uh-N9F" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="zvb-7e-deq"/>
                         </constraints>
                         <animations/>
                     </view>
@@ -78,7 +80,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="646"/>
+            <point key="canvasLocation" x="130.5" y="646"/>
         </scene>
     </scenes>
 </document>
