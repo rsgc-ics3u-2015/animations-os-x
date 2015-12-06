@@ -81,13 +81,13 @@ public class Color {
         self.saturation = rationalizePercentage(saturation)
         self.brightness = rationalizePercentage(brightness)
         self.alpha = rationalizePercentage(alpha)
-    
+        
         // Prepare values to provide to NSColor initializer
         self.translatedHue = CGFloat(self.hue / 360)
         self.translatedSaturation = CGFloat(self.saturation / 100)
         self.translatedBrightness = CGFloat(self.brightness / 100)
         self.translatedAlpha = CGFloat(self.alpha / 100)
-
+        
     }
     
     // Takes a given number of degrees and translates to range between 0 and 360
@@ -118,7 +118,7 @@ public class Color {
     
 }
 
-@objc public class Canvas : NSObject {
+public class Canvas : CustomPlaygroundQuickLookable {
     
     // Frame rate for animation on this canvas
     var framesPerSecond : Int = 60 {
@@ -193,12 +193,12 @@ public class Color {
         
         // Create the blank image that will be presented in the image view
         let image = NSImage(size: imageSize)
-                
+        
         // Set this (currently blank) image so that it is displayed by the image view
         self.imageView.image = image
         
     }
-
+    
     // Draw a line on the image
     public func drawLine(fromX fromX: Int, fromY: Int, toX: Int, toY: Int, lineWidth: Int = 0) -> NSBezierPath {
         
@@ -222,7 +222,7 @@ public class Color {
             
             // Set the line's color
             NSColor(hue: lineColor.translatedHue, saturation: lineColor.translatedSaturation, brightness: lineColor.translatedBrightness, alpha: lineColor.translatedAlpha).setStroke()
-
+            
             // Draw the line
             path.stroke()
             
@@ -312,7 +312,7 @@ public class Color {
             
             // Set rectangle border color
             NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
-
+            
             // Draw the rectangle border
             if (self.drawShapesWithBorders == true) {
                 path.stroke()
@@ -320,7 +320,7 @@ public class Color {
             
             // Set rectangle fill color
             NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
-
+            
             // Fill the rectangle
             if (self.drawShapesWithFill == true) {
                 path.fill()
@@ -331,7 +331,7 @@ public class Color {
             
             // Show the path created (this improves QuickLook results in Swift Playground)
             return path
-
+            
         } else {
             
             // If an error occured, return an empty path
@@ -341,12 +341,10 @@ public class Color {
         
     }
     
-    // This provides better QuickLook results in a Swift Playground (shows current state of image being displayed by the image view)
-    func debugQuickLookObject() -> AnyObject? {
-        
-        return self.imageView.image!
-        
+    public func customPlaygroundQuickLook() -> PlaygroundQuickLook {
+        return .Image(self.imageView)
     }
+    
 }
 
 
