@@ -39,7 +39,7 @@ class Sketch {
         x = x + s
         
         // Bounce when hitting wall
-        if (x > 480 || x < 0) {
+        if (x > canvas.width || x < 0) {
             s *= -1
         }
         
@@ -51,7 +51,7 @@ class Sketch {
         // Draw a circle that moves across the screen
         canvas.drawShapesWithBorders = false
         canvas.fillColor = Color(hue: Float(frameCount), saturation: 80, brightness: 90, alpha: 100)
-        canvas.drawEllipse(centreX: x, centreY: 135, width: 25, height: 25)
+        canvas.drawEllipse(centreX: x, centreY: canvas.height / 2, width: 25, height: 25)
         
     }
     
