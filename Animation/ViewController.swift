@@ -45,7 +45,7 @@ class ViewController: NSViewController {
         // Show the image from the canvas
         canvasView.image = nil
         canvasView.image = sketch.c.canvas.image
-        
+            
         
     }
     

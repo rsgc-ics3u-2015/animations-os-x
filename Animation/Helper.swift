@@ -120,74 +120,77 @@ public class Color {
 
 @objc public class Canvas : NSObject {
     
-    // Image view to be displayed
-    public var canvas: NSImageView = NSImageView()
+    // Image view that will display our image
+    public var imageView: NSImageView = NSImageView()
     
-    // line width
+    // default line width
     public var defaultLineWidth: Int = 1 {
         didSet {
+            // Ensure rational line width set
             if (defaultLineWidth < 0) {
                 defaultLineWidth = 1
             }
         }
     }
     
-    // line color
+    // Line color, default is black
     public var lineColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     
-    // border width for closed shapes
+    // Border width for closed shapes
     public var defaultBorderWidth: Int = 1 {
         didSet {
+            // Ensure rational border width set
             if (defaultBorderWidth < 0) {
-                defaultBorderWidth = 0
+                defaultBorderWidth = 1
             }
         }
     }
     
-    // border color
+    // Border color, default is black
     public var borderColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     
-    // fill color
+    // Fill color, default is black
     public var fillColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     
-    // whether to draw shapes with borders
+    // Whether to draw shapes with borders
     public var drawShapesWithBorders: Bool = true
     
-    // whether to draw shapes with fill
+    // Whether to draw shapes with fill
     public var drawShapesWithFill: Bool = true
     
-    // size of canvas
+    // Size of canvas
     public var width : Int
     public var height : Int
     
     // Initialization of object based on this class
     public init(width: Int, height: Int) {
         
-        // Set the width and height of the sketch
+        // Set the width and height of the canvas
         self.width = width
         self.height = height
         
-        // Create the frame
+        // Create the frame that defines boundaries of the image view to be used
         let frameRect = NSRect(x: 0, y: 0, width: self.width, height: self.height)
         
-        // Set the view, or canvas, to place an image on
-        self.canvas = NSImageView(frame: frameRect)
+        // Create the image view based on dimensions of frame created
+        self.imageView = NSImageView(frame: frameRect)
         
-        // Define the size of the image, or 'canvas', we want to use
-        let mySize = NSMakeSize(CGFloat(self.width), CGFloat(self.height))
+        // Define the size of the image that will be presented in the image view
+        let imageSize = NSMakeSize(CGFloat(self.width), CGFloat(self.height))
         
-        // Create the blank image that will be painted on the canvas
-        let myImage = NSImage(size: mySize)
+        // Create the blank image that will be presented in the image view
+        let image = NSImage(size: imageSize)
         
-        // Set the image to be displayed on the canvas
-        self.canvas.image = myImage
+        // Set this (currently blank) image so that it is displayed by the image view
+        self.imageView.image = image
         
     }
-    
+
+    // Draw a line on the image
     public func drawLine(fromX fromX: Int, fromY: Int, toX: Int, toY: Int, lineWidth: Int = 0) -> NSBezierPath {
         
-        // Draw on the image that (presumably) has been defined on this canvas
-        if let _ = self.canvas.image?.lockFocus() {
+        // If an image has been defined for the image view, draw on it
+        if let _ = self.imageView.image?.lockFocus() {
             
             
             // Make the new path
@@ -204,13 +207,16 @@ public class Color {
             path.moveToPoint(NSPoint(x: fromX, y: fromY))
             path.lineToPoint(NSPoint(x: toX, y: toY))
             
-            // Draw the line
+            // Set the line's color
             NSColor(hue: lineColor.translatedHue, saturation: lineColor.translatedSaturation, brightness: lineColor.translatedBrightness, alpha: lineColor.translatedAlpha).setStroke()
+
+            // Draw the line
             path.stroke()
             
-            // Stop drawing to the canvas image
-            self.canvas.image!.unlockFocus()
+            // Stop drawing to the image
+            self.imageView.image!.unlockFocus()
             
+            // Show the path created (this improves QuickLook results in Swift Playground)
             return path
             
         } else {
@@ -220,13 +226,13 @@ public class Color {
             
         }
         
-        
     }
     
-    public func drawEllipse(centreX centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 1) -> NSBezierPath {
+    // Draw an ellipse on the image
+    public func drawEllipse(centreX centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 0) -> NSBezierPath {
         
-        // Draw on the image that (presumably) has been defined on this canvas
-        if let _ = self.canvas.image?.lockFocus() {
+        // If an image has been defined for the image view, draw on it
+        if let _ = self.imageView.image?.lockFocus() {
             
             // Make the new path
             let path = NSBezierPath(ovalInRect: NSRect(x: centreX - width/2, y: centreY - height/2, width: width, height: height))
@@ -238,21 +244,26 @@ public class Color {
                 path.lineWidth = CGFloat(self.defaultBorderWidth)
             }
             
-            // Draw the ellipse border
+            // Set ellipse border color
             NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
+            
+            // Draw the ellipse border
             if (self.drawShapesWithBorders == true) {
                 path.stroke()
             }
             
-            // Fill the ellipse
+            // Set ellipse fill color
             NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
+            
+            // Fill the ellipse
             if (self.drawShapesWithFill == true) {
                 path.fill()
             }
             
-            // Stop drawing to the canvas image
-            self.canvas.image!.unlockFocus()
+            // Stop drawing to the image
+            self.imageView.image!.unlockFocus()
             
+            // Show the path created (this improves QuickLook results in Swift Playground)
             return path
             
         } else {
@@ -263,10 +274,11 @@ public class Color {
         }
     }
     
+    // Draw a rectangle on the image
     public func drawRectangle(bottomRightX bottomRightX: Int, bottomRightY: Int, width: Int, height: Int, borderWidth: Int = 1) -> NSBezierPath {
         
-        // Draw on the image that (presumably) has been defined on this canvas
-        if let _ = self.canvas.image?.lockFocus() {
+        // If an image has been defined for the image view, draw on it
+        if let _ = self.imageView.image?.lockFocus() {
             
             // Make the new path
             let path = NSBezierPath()
@@ -285,22 +297,28 @@ public class Color {
             path.lineToPoint(NSPoint(x: bottomRightX, y: bottomRightY + height))
             path.lineToPoint(NSPoint(x: bottomRightX, y: bottomRightY))
             
-            // Draw the rectangle border
+            // Set rectangle border color
             NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
+
+            // Draw the rectangle border
             if (self.drawShapesWithBorders == true) {
                 path.stroke()
             }
             
-            // Fill the rectangle
+            // Set rectangle fill color
             NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
+
+            // Fill the rectangle
             if (self.drawShapesWithFill == true) {
                 path.fill()
             }
             
-            // Stop drawing to the canvas image
-            self.canvas.image!.unlockFocus()
+            // Stop drawing to the image
+            self.imageView.image!.unlockFocus()
             
+            // Show the path created (this improves QuickLook results in Swift Playground)
             return path
+
         } else {
             
             // If an error occured, return an empty path
@@ -310,9 +328,10 @@ public class Color {
         
     }
     
+    // This provides better QuickLook results in a Swift Playground (shows current state of image being displayed by the image view)
     func debugQuickLookObject() -> AnyObject? {
         
-        return self.canvas.image!
+        return self.imageView.image!
         
     }
 }
