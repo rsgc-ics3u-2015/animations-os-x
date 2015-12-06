@@ -14,10 +14,7 @@ class Sketch {
     //       Therefore, the line immediately below must always be present.
     let canvas : Canvas
     
-    // This property is not absolutely required, but is often useful
-    var frameCount = 0
-
-    // Declare any properties you need for your sketch here
+    // Declare any properties you need for your sketch below this comment, but before init()
     var x = 0
     var s = 1
 
@@ -34,12 +31,7 @@ class Sketch {
     
     // Runs repeatedly, equivalent to draw() in Processing
     func draw() {
-        
-        // Keep track of how many frames have been drawn
-        frameCount += 1
-        
-        // Add any code for your sketch below...
-        
+                
         // Horizontal position of circle
         x = x + s
         
@@ -55,7 +47,7 @@ class Sketch {
         
         // Draw a circle that moves across the screen
         canvas.drawShapesWithBorders = false
-        canvas.fillColor = Color(hue: Float(frameCount), saturation: 80, brightness: 90, alpha: 100)
+        canvas.fillColor = Color(hue: Float(canvas.frameCount), saturation: 80, brightness: 90, alpha: 100)
         canvas.drawEllipse(centreX: x, centreY: canvas.height / 2, width: 25, height: 25)
         
     }

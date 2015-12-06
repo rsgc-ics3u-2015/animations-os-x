@@ -130,6 +130,9 @@ public class Color {
         }
     }
     
+    // Keep track of how many frames have been animated using this particular canvas
+    var frameCount : Int = 0
+    
     // Image view that will display our image
     public var imageView: NSImageView = NSImageView()
     

@@ -42,6 +42,9 @@ class ViewController: NSViewController {
         // Call the draw() method on the Sketch object
         sketch.draw()
         
+        // Increment the frame count for the current canvas of the sketch
+        sketch.canvas.frameCount += 1
+        
         // Show the image from the canvas
         canvasView.image = nil
         canvasView.image = sketch.canvas.imageView.image
