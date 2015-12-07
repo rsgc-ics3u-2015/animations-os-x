@@ -13,10 +13,13 @@ class ViewController: NSViewController {
     var timer = NSTimer()
     var sketch = Sketch()
     
-    @IBOutlet var canvasView: NSImageCell!
+    @IBOutlet var myView: NSView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Tell OS that we want a layer to display an image on
+        self.view.wantsLayer = true
         
         // Initialize the timer used to drive the sketch
         timer = NSTimer.scheduledTimerWithTimeInterval(1/Double(sketch.canvas.framesPerSecond), target: self, selector: Selector("timedDraw"), userInfo: nil, repeats: true)
@@ -45,9 +48,11 @@ class ViewController: NSViewController {
         // Increment the frame count for the current canvas of the sketch
         sketch.canvas.frameCount += 1
         
-        // Show the image from the canvas
-        canvasView.image = nil
-        canvasView.image = sketch.canvas.imageView.image
+        // Get a Core Graphics representation of the current image on the canvas
+        // and set it to the backing layer of the NSView object tied to the
+        // view controller
+        var imageRect : NSRect = NSMakeRect(0, 0, CGFloat(sketch.canvas.width), CGFloat(sketch.canvas.height))
+        self.view.layer!.contents = sketch.canvas.imageView.image?.CGImageForProposedRect(&imageRect, context: NSGraphicsContext.currentContext(), hints: nil)
         
         
     }

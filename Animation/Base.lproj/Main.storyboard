@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9060"/>
     </dependencies>
     <scenes>
@@ -60,22 +59,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="511" height="282"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XvO-uh-N9F">
-                                <rect key="frame" x="0.0" y="0.0" width="511" height="282"/>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bNX-B2-UgG">
+                                <rect key="frame" x="354" y="136" width="48" height="48"/>
                                 <animations/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="tZP-wG-W4B"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="SXp-NC-Yya"/>
                             </imageView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="XvO-uh-N9F" firstAttribute="height" secondItem="m2S-Jp-Qdl" secondAttribute="height" id="CbU-Om-afv"/>
-                            <constraint firstItem="XvO-uh-N9F" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="ni1-A4-bm7"/>
-                            <constraint firstItem="XvO-uh-N9F" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="vnp-zs-m4R"/>
-                            <constraint firstItem="XvO-uh-N9F" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="zvb-7e-deq"/>
+                            <constraint firstItem="bNX-B2-UgG" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="LEH-hO-xeb"/>
+                            <constraint firstItem="bNX-B2-UgG" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="V33-UW-byl"/>
+                            <constraint firstItem="bNX-B2-UgG" firstAttribute="height" secondItem="m2S-Jp-Qdl" secondAttribute="height" id="cVl-bP-Yk3"/>
+                            <constraint firstItem="bNX-B2-UgG" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="nSA-Sp-HhB"/>
                         </constraints>
                         <animations/>
                     </view>
                     <connections>
-                        <outlet property="canvasView" destination="tZP-wG-W4B" id="fyQ-sF-KPT"/>
+                        <outlet property="view" destination="m2S-Jp-Qdl" id="0QQ-3D-E7L"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
