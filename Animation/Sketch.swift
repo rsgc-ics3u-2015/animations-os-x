@@ -23,8 +23,8 @@ class Sketch {
         // Create canvas object – specify size
         canvas = Canvas(width: 900, height: 700)
         
-        // The frame rate can be adjusted; the default is 60 fps
-        canvas.framesPerSecond = 60
+        // The frame rate can be adjusted; the default is 30 fps
+        canvas.framesPerSecond = 30
         
         // create 100 bouncing balls
         for i in 0...99 {

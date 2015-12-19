@@ -121,11 +121,21 @@ public class Color {
 public class Canvas : CustomPlaygroundQuickLookable {
     
     // Frame rate for animation on this canvas
-    var framesPerSecond : Int = 60 {
+    var framesPerSecond : Int = 30 {
         didSet {
             // Ensure rational frame rate set
+            // Per https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CocoaDrawingGuide/AdvancedDrawing/AdvancedDrawing.html#//apple_ref/doc/uid/TP40003290-CH207-CJBFEEJA:
+            //      If you are creating animated content, you should also be careful not to trigger visual
+            //      updates more frequently than the screen refresh rate allows. Updating faster than the
+            //      refresh rate results in your code drawing frames that are never seen by the user. In
+            //      addition, updating faster than the refresh rate is not allowed in OS X v10.4 and later.
+            //      If you try to update the screen faster than the refresh rate, the window server may 
+            //      block the offending thread until the next update cycle.
+
             if (framesPerSecond < 0) {
                 framesPerSecond = 1
+            } else if (framesPerSecond > 30) {
+                framesPerSecond = 30
             }
         }
     }
