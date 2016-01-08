@@ -27,6 +27,12 @@ class Sketch {
         // The frame rate can be adjusted; the default is 60 fps
         canvas.framesPerSecond = 60
         
+        // Play an audio tone (NOTE: First run, application may crash; seems to work on second run)
+        let instrument = AKInstrument()
+        instrument.setAudioOutput(AKOscillator())
+        AKOrchestra.addInstrument(instrument)
+        instrument.play()
+        
     }
     
     // Runs repeatedly, equivalent to draw() in Processing

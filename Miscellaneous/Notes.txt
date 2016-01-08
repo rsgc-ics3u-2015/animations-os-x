@@ -1,0 +1,18 @@
+Had to fix code signing issue as follows before project would compile:
+
+Gordon:CsoundLib.framework russellgordon$ codesign -f -s - CsoundLib
+CsoundLib: code object is not signed at all
+In subcomponent: /Users/russellgordon/Documents/Repositories/ICS3U-2015/animations-os-x/AudioKit/AudioKit/Platforms/OSX/CsoundLib.framework/Versions/6.0/libcsnd6.6.0.dylib
+Gordon:CsoundLib.framework russellgordon$ cd Versions/6.0/
+Gordon:6.0 russellgordon$ ls -al
+total 10624
+drwxr-xr-x@ 5 russellgordon  staff      170  1 Nov 00:45 .
+drwxr-xr-x@ 4 russellgordon  staff      136  8 Jan 09:23 ..
+-rwxr-xr-x@ 1 russellgordon  staff  5025684  1 Nov 00:45 CsoundLib
+drwxr-xr-x@ 4 russellgordon  staff      136  1 Nov 00:45 Resources
+-rwxr-xr-x@ 1 russellgordon  staff   411628  1 Nov 00:45 libcsnd6.6.0.dylib
+Gordon:6.0 russellgordon$ codesign -f -s - libcsnd6.6.0.dylib 
+Gordon:6.0 russellgordon$ cd ..
+Gordon:Versions russellgordon$ cd ..
+Gordon:CsoundLib.framework russellgordon$ codesign -f -s - CsoundLib
+Gordon:CsoundLib.framework russellgordon$ 

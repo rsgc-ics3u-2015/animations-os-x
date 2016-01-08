@@ -23,7 +23,7 @@ class ViewController: NSViewController {
         
         // Initialize the timer used to drive the sketch
         timer = NSTimer.scheduledTimerWithTimeInterval(1/Double(sketch.canvas.framesPerSecond), target: self, selector: Selector("timedDraw"), userInfo: nil, repeats: true)
-        
+                
     }
 
     override func viewWillAppear() {
