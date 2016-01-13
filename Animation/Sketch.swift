@@ -57,7 +57,10 @@ class Sketch {
         // Draw some more text on the screen
         canvas.textColor = Color(hue: 60, saturation: 80, brightness: 90, alpha: 100) // yellow
         canvas.drawText(message: "Current frame: \(canvas.frameCount)", size: 12, x: canvas.width / 16, y: canvas.height - canvas.height / 8)
-                
+
+        // Text with emoji works too
+        canvas.drawText(message: "😜", size: 48, x: canvas.width - canvas.width / 4, y: canvas.height - canvas.height / 4)
+
     }
     
 }
