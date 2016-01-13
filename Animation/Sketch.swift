@@ -49,6 +49,14 @@ class Sketch {
         canvas.drawShapesWithBorders = false
         canvas.fillColor = Color(hue: Float(canvas.frameCount), saturation: 80, brightness: 90, alpha: 100)
         canvas.drawEllipse(centreX: x, centreY: canvas.height / 2, width: 25, height: 25)
+        
+        // Draw some text on the screen
+        canvas.textColor = Color(hue: 0, saturation: 0, brightness: 100, alpha: 100) // white
+        canvas.drawText(message: "Hello, world!")
+        
+        // Draw some more text on the screen
+        canvas.textColor = Color(hue: 60, saturation: 80, brightness: 90, alpha: 100) // yellow
+        canvas.drawText(message: "Current frame: \(canvas.frameCount)", size: 12, x: canvas.width / 16, y: canvas.height - canvas.height / 8)
                 
     }
     

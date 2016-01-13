@@ -164,6 +164,9 @@ public class Canvas : CustomPlaygroundQuickLookable {
     
     // Fill color, default is black
     public var fillColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
+
+    // Text color, default is black
+    public var textColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     
     // Whether to draw shapes with borders
     public var drawShapesWithBorders: Bool = true
@@ -197,6 +200,45 @@ public class Canvas : CustomPlaygroundQuickLookable {
         // Set this (currently blank) image so that it is displayed by the image view
         self.imageView.image = image
         
+    }
+    
+    // Draw text on the image
+    public func drawText(message message: String, size: Int = 24, x: Int = 0, y: Int = 0)  {
+        
+        // If an image has been defined for the image view, draw on it
+        if let _ = self.imageView.image?.lockFocus() {
+            
+            // Convert the provided String object to an NSString object
+            let string: NSString = NSString(string: message)
+            
+            // set the text color to dark gray
+            let fieldColor : NSColor = NSColor(hue: textColor.translatedHue, saturation: textColor.translatedSaturation, brightness: textColor.translatedBrightness, alpha: textColor.translatedAlpha)
+            
+            // set the font to Helvetica Neue 18
+            let fieldFont = NSFont(name: "Helvetica Neue", size: CGFloat(size))
+            
+            // set the line spacing to 1
+            let paraStyle = NSMutableParagraphStyle()
+            paraStyle.lineSpacing = 1.0
+            
+            // set the Obliqueness (tilt of text) to 0.0
+            let skew = 0.0
+            
+            // create dictionary with attributes of the string to be drawn
+            let attributes: [String : AnyObject] = [
+                NSForegroundColorAttributeName: fieldColor,
+                NSParagraphStyleAttributeName: paraStyle,
+                NSObliquenessAttributeName: skew,
+                NSFontAttributeName: fieldFont!
+            ]
+            
+            // Draw the string
+            string.drawAtPoint(NSPoint(x: x, y: y), withAttributes: attributes)
+            
+            // Stop drawing to the image
+            self.imageView.image!.unlockFocus()
+            
+        }
     }
     
     // Draw a line on the image
