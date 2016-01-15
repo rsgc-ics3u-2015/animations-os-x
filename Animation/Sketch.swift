@@ -60,6 +60,12 @@ class Sketch {
 
         // Text with emoji works too
         canvas.drawText(message: "😜", size: 48, x: canvas.width - canvas.width / 4, y: canvas.height - canvas.height / 4)
+        
+        // Draw a circle where the mouse pointer is
+        canvas.drawShapesWithBorders = false
+        canvas.drawShapesWithFill = true
+        canvas.fillColor = Color(hue: 0, saturation: 0, brightness: 100, alpha: 100)
+        canvas.drawEllipse(centreX: Int(canvas.mouseX), centreY: Int(canvas.mouseY), width: 5, height: 5)
 
     }
     

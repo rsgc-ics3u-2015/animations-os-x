@@ -178,6 +178,10 @@ public class Canvas : CustomPlaygroundQuickLookable {
     public let width : Int
     public let height : Int
     
+    // Current location of mouse on canvas
+    public var mouseX : Float = 0.0
+    public var mouseY : Float = 0.0
+    
     // Initialization of object based on this class
     public init(width: Int, height: Int) {
         

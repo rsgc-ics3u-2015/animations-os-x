@@ -15,11 +15,27 @@ class ViewController: NSViewController {
     
     @IBOutlet var myView: NSView!
     
+    override func mouseDown(theEvent: NSEvent) {
+//        print("Mouse Clicked")
+//        print(theEvent.locationInWindow)
+        
+        // Set the mouseX and mouseY values on the canvas
+        sketch.canvas.mouseX = Float(theEvent.locationInWindow.x)
+        sketch.canvas.mouseY = Float(theEvent.locationInWindow.y)
+    }
+    
+    override func keyDown(theEvent: NSEvent) {
+        print("Key Pressed")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Tell OS that we want a layer to display an image on
         self.view.wantsLayer = true
+        
+        // We want to accept keyboard events
+//        self.view.window
         
         // Initialize the timer used to drive the sketch
         timer = NSTimer.scheduledTimerWithTimeInterval(1/Double(sketch.canvas.framesPerSecond), target: self, selector: Selector("timedDraw"), userInfo: nil, repeats: true)
