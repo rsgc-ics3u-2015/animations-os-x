@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Sketch {
+class Sketch : NSObject {
 
     // NOTE: Every sketch must contain an object of type Canvas named 'canvas'
     //       Therefore, the line immediately below must always be present.
@@ -19,7 +19,7 @@ class Sketch {
     var s = 1
 
     // This runs once, equivalent to setup() in Processing
-    init() {
+    override init() {
         
         // Create canvas object – specify size
         canvas = Canvas(width: 500, height: 300)
