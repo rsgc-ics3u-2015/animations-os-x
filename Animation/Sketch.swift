@@ -17,6 +17,7 @@ class Sketch : NSObject {
     // Declare any properties you need for your sketch below this comment, but before init()
     var x = 0
     var s = 1
+    var backgroundRed : Bool = false
 
     // This runs once, equivalent to setup() in Processing
     override init() {
@@ -43,7 +44,13 @@ class Sketch : NSObject {
         // "Clear" the background with a semi-transparent black rectangle
         canvas.drawShapesWithBorders = false
         canvas.fillColor = Color(hue: 0, saturation: 0, brightness: 0, alpha: 10)
+        if (backgroundRed == true) {
+            canvas.fillColor = Color(hue: 0, saturation: 80, brightness: 90, alpha: 100)
+        } else {
+            canvas.fillColor = Color(hue: 0, saturation: 0, brightness: 0, alpha: 10)
+        }
         canvas.drawRectangle(bottomRightX: 0, bottomRightY: 0, width: canvas.width, height: canvas.height)
+        
         
         // Draw a circle that moves across the screen
         canvas.drawShapesWithBorders = false
@@ -67,6 +74,15 @@ class Sketch : NSObject {
         canvas.fillColor = Color(hue: 0, saturation: 0, brightness: 100, alpha: 100)
         canvas.drawEllipse(centreX: Int(canvas.mouseX), centreY: Int(canvas.mouseY), width: 5, height: 5)
 
+    }
+    
+    // Respond to the mouseDown event
+    func mouseDown() {
+        if backgroundRed == true {
+            backgroundRed = false
+        } else {
+            backgroundRed = true
+        }
     }
     
 }
