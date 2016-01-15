@@ -17,7 +17,7 @@ class Sketch : NSObject {
     // Declare any properties you need for your sketch below this comment, but before init()
     var x = 0
     var s = 1
-    var backgroundRed : Bool = false
+    var backgroundRed : Bool = false // Boolean to toggle whether background is red
 
     // This runs once, equivalent to setup() in Processing
     override init() {
@@ -41,9 +41,10 @@ class Sketch : NSObject {
             s *= -1
         }
         
-        // "Clear" the background with a semi-transparent black rectangle
+        // "Clear" the background
         canvas.drawShapesWithBorders = false
         canvas.fillColor = Color(hue: 0, saturation: 0, brightness: 0, alpha: 10)
+        // Decide what color to make the background
         if (backgroundRed == true) {
             canvas.fillColor = Color(hue: 0, saturation: 80, brightness: 90, alpha: 100)
         } else {
@@ -78,11 +79,14 @@ class Sketch : NSObject {
     
     // Respond to the mouseDown event
     func mouseDown() {
+        
+        // When the mouse is pressed, change the background color that will be used.
         if backgroundRed == true {
             backgroundRed = false
         } else {
             backgroundRed = true
         }
+        
     }
     
 }
