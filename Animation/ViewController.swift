@@ -16,12 +16,16 @@ class ViewController: NSViewController {
     @IBOutlet var myView: NSView!
     
     override func mouseDown(theEvent: NSEvent) {
-//        print("Mouse Clicked")
-//        print(theEvent.locationInWindow)
         
         // Set the mouseX and mouseY values on the canvas
         sketch.canvas.mouseX = Float(theEvent.locationInWindow.x)
         sketch.canvas.mouseY = Float(theEvent.locationInWindow.y)
+        
+        // Call the mouseDown function on the canvas, but only if it exists
+        if sketch.respondsToSelector(Selector("mouseDown")) {
+            sketch.mouseDown()
+        }
+        
     }
     
     override func keyDown(theEvent: NSEvent) {
