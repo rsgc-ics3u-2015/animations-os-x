@@ -1,6 +1,7 @@
 //: Playground - noun: a place where people can play
 
 import Cocoa
+import XCPlayground
 
 /*:
 
@@ -11,7 +12,7 @@ Have fun!
 */
 
 // Create a new canvas
-let canvas = Canvas(width: 500, height: 500)
+let canvas = Canvas(width: 500, height: 200)
 
 // Draw a circle at the origin with radius of 50 pixels
 canvas.drawEllipse(centreX: 0, centreY: 0, width: 50, height: 50)
@@ -58,4 +59,5 @@ for i in -5...5 {
 // View the current state of the canvas
 canvas
 
-
+XCPlaygroundPage.currentPage.liveView = canvas
+XCPlaygroundPage.currentPage.needsIndefiniteExecution = true
