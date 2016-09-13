@@ -1,6 +1,5 @@
 import Cocoa
 import Foundation
-import XCPlayground
 
 public class Color {
     
@@ -392,11 +391,4 @@ public class Canvas : CustomPlaygroundQuickLookable {
         return .Image(self.imageView)
     }
     
-}
-
-extension Canvas : XCPlaygroundLiveViewable {
-    public func playgroundLiveViewRepresentation() -> XCPlaygroundLiveViewRepresentation {
-        let vc = CanvasLiveViewableViewController(canvas: self)
-        return .ViewController(vc)
-    }
 }
