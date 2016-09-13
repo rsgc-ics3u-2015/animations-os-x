@@ -1,18 +1,27 @@
-//: Playground - noun: a place where people can play
+/*:
+ 
+ # playground
+ 
+ *noun*: a place where people can play
+ 
+ ##
+ 
+ Use this playground to experiment with the Canvas class.
+ 
+ Your goals are to:
+ 
+ * learn something about order of statements (does order matter?)
+ * get familiar with using a Playground
 
+ Have fun!
+
+*/
+// These are some required statements to make this playground work.
 import Cocoa
 import XCPlayground
 
-/*:
-
-Use this Playground to experiment with the Canvas class.
-
-Have fun!
-
-*/
-
 // Create a new canvas
-let canvas = Canvas(width: 500, height: 200)
+let canvas = Canvas(width: 300, height: 500)
 
 // Draw a circle at the origin with radius of 50 pixels
 canvas.drawEllipse(centreX: 0, centreY: 0, width: 50, height: 50)
@@ -20,44 +29,61 @@ canvas.drawEllipse(centreX: 0, centreY: 0, width: 50, height: 50)
 // View the current state of the canvas
 canvas
 
+/*:
+ ## Reflect
+ 
+ What does this tell you about the location of the origin on the canvas?
+ */
+
 // Draw an ellipse no fill in the middle of the canvas
 canvas.drawShapesWithFill = false
-canvas.drawEllipse(centreX: canvas.width/2, centreY: canvas.height/2, width: 50, height: 100)
+canvas.drawEllipse(centreX: 150, centreY: 250, width: 50, height: 100)
 
 // View the current state of the canvas
 canvas
 
-// Draw a rectangle with red fill and thick green border in bottom left corner of canvas
+/*:
+ ## Reflect
+ 
+ What if you changed the size of your canvas?
+ 
+ Would the arguments to *drawEllipse* still place the ellipse at the middle of the canvas?
+ 
+ */
+// Draw a rectangle with red fill and no border in bottom left corner of canvas
 canvas.fillColor = Color(hue: 0, saturation: 80, brightness: 90, alpha: 100)
 canvas.drawShapesWithFill = true
-canvas.borderColor = Color(hue: 120, saturation: 80, brightness: 40, alpha: 100)
+canvas.drawShapesWithBorders = false
+canvas.drawRectangle(bottomRightX: 250, bottomRightY: 0, width: 50, height: 50, borderWidth: 5)
+
+// View the current state of the canvas
+canvas
+
+// Draw a thick vertical line from top of canvas to middle
+canvas.drawLine(fromX: 150, fromY: 500, toX: 150, toY: 250, lineWidth: 10)
+
+// View the current state of the canvas
+canvas
+
+// Draw circles with increasing size near the bottom of the canvas
+canvas.drawShapesWithFill = false
 canvas.drawShapesWithBorders = true
-canvas.drawRectangle(bottomRightX: canvas.width - 55, bottomRightY: 5, width: 50, height: 50, borderWidth: 5)
-
-// View the current state of the canvas
-canvas
-
-// Draw a horizontal line at the top of the canvas
-canvas.drawLine(fromX: 100, fromY: 400, toX: canvas.width - 100, toY: 400)
-
-// View the current state of the canvas
-canvas
-
-// Draw a "fan" of lines with increasing thickness across bottom of canvas
-for i in -5...5 {
+for diameter in 1...5 {
     
-    // Change hue to traverse spectrum
-    let hue : Float = (Float(i) + 5) * (360 / 10)
+    canvas.drawEllipse(centreX: 150, centreY: 100, width: diameter*10, height: diameter*10)
     
-    // Set line color
-    canvas.lineColor = Color(hue: hue, saturation: 80, brightness: 90, alpha: 100)
-    
-    // Draw the line
-    canvas.drawLine(fromX: canvas.width / 2, fromY: 50, toX: canvas.width / 2 + i*50, toY: 150, lineWidth: i)
 }
 
 // View the current state of the canvas
 canvas
 
+// Text with emoji works too – draw a winky face in the top left corner
+canvas.drawText(message: "😜", size: 48, x: 0, y: 425)
+canvas.drawText(message: "Yasss", size: 24, x: 0, y: 375)
+
+// View the current state of the canvas
+canvas
+
+
+// This code is necessary to see the result in the Assistant Editor at right
 XCPlaygroundPage.currentPage.liveView = canvas
-XCPlaygroundPage.currentPage.needsIndefiniteExecution = true
