@@ -9,7 +9,7 @@
 import Foundation
 
 class Sketch : NSObject {
-
+    
     // NOTE: Every sketch must contain an object of type Canvas named 'canvas'
     //       Therefore, the line immediately below must always be present.
     let canvas : Canvas
@@ -18,7 +18,7 @@ class Sketch : NSObject {
     var x = 0
     var s = 1
     var backgroundRed : Bool = false // Boolean to toggle whether background is red
-
+    
     // This runs once, equivalent to setup() in Processing
     override init() {
         
@@ -32,7 +32,7 @@ class Sketch : NSObject {
     
     // Runs repeatedly, equivalent to draw() in Processing
     func draw() {
-                
+        
         // Horizontal position of circle
         x = x + s
         
@@ -50,7 +50,7 @@ class Sketch : NSObject {
         } else {
             canvas.fillColor = Color(hue: 0, saturation: 0, brightness: 0, alpha: 10)
         }
-        canvas.drawRectangle(bottomRightX: 0, bottomRightY: 0, width: canvas.width, height: canvas.height)
+        canvas.drawRectangle(bottomLeftX: 0, bottomLeftY: 0, width: canvas.width, height: canvas.height)
         
         
         // Draw a circle that moves across the screen
@@ -65,7 +65,7 @@ class Sketch : NSObject {
         // Draw some more text on the screen
         canvas.textColor = Color(hue: 60, saturation: 80, brightness: 90, alpha: 100) // yellow
         canvas.drawText(message: "Current frame: \(canvas.frameCount)", size: 12, x: canvas.width / 16, y: canvas.height - canvas.height / 8)
-
+        
         // Text with emoji works too
         canvas.drawText(message: "😜", size: 48, x: canvas.width - canvas.width / 4, y: canvas.height - canvas.height / 4)
         
@@ -74,7 +74,7 @@ class Sketch : NSObject {
         canvas.drawShapesWithFill = true
         canvas.fillColor = Color(hue: 0, saturation: 0, brightness: 100, alpha: 100)
         canvas.drawEllipse(centreX: Int(canvas.mouseX), centreY: Int(canvas.mouseY), width: 5, height: 5)
-
+        
     }
     
     // Respond to the mouseDown event

@@ -10,25 +10,25 @@ import Cocoa
 
 class ViewController: NSViewController {
     
-    var timer = NSTimer()
+    var timer = Timer()
     var sketch = Sketch()
     
     @IBOutlet var myView: NSView!
     
-    override func mouseDown(theEvent: NSEvent) {
+    override func mouseDown(with theEvent: NSEvent) {
         
         // Set the mouseX and mouseY values on the canvas
         sketch.canvas.mouseX = Float(theEvent.locationInWindow.x)
         sketch.canvas.mouseY = Float(theEvent.locationInWindow.y)
         
         // Call the mouseDown function on the canvas, but only if it exists
-        if sketch.respondsToSelector(Selector("mouseDown")) {
+        if sketch.responds(to: Selector(("mouseDown"))) {
             sketch.mouseDown()
         }
         
     }
     
-    override func keyDown(theEvent: NSEvent) {
+    override func keyDown(with theEvent: NSEvent) {
         print("Key Pressed")
     }
     
@@ -39,13 +39,13 @@ class ViewController: NSViewController {
         self.view.wantsLayer = true
         
         // We want to accept keyboard events
-//        self.view.window
+        //        self.view.window
         
         // Initialize the timer used to drive the sketch
-        timer = NSTimer.scheduledTimerWithTimeInterval(1/Double(sketch.canvas.framesPerSecond), target: self, selector: #selector(ViewController.timedDraw), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1/Double(sketch.canvas.framesPerSecond), target: self, selector: #selector(ViewController.timedDraw), userInfo: nil, repeats: true)
         
     }
-
+    
     override func viewWillAppear() {
         super.viewWillAppear()
         
@@ -54,7 +54,7 @@ class ViewController: NSViewController {
         preferredContentSize = NSSize(width: sketch.canvas.width, height: sketch.canvas.height)
     }
     
-    override var representedObject: AnyObject? {
+    override var representedObject: Any? {
         didSet {
             // Update the view, if already loaded.
         }
@@ -72,7 +72,7 @@ class ViewController: NSViewController {
         // and set it to the backing layer of the NSView object tied to the
         // view controller
         var imageRect : NSRect = NSMakeRect(0, 0, CGFloat(sketch.canvas.width), CGFloat(sketch.canvas.height))
-        self.view.layer!.contents = sketch.canvas.imageView.image?.CGImageForProposedRect(&imageRect, context: NSGraphicsContext.currentContext(), hints: nil)
+        self.view.layer!.contents = sketch.canvas.imageView.image?.cgImage(forProposedRect: &imageRect, context: NSGraphicsContext.current(), hints: nil)
         
         
     }

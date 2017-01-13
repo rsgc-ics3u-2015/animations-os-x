@@ -9,7 +9,7 @@
 import Cocoa
 
 class CanvasLiveViewableViewController: NSViewController {
-
+    
     var canvas : Canvas
     
     init(canvas : Canvas) {
@@ -27,7 +27,7 @@ class CanvasLiveViewableViewController: NSViewController {
         
         // Do view setup here
         var imageRect : NSRect = NSMakeRect(0, 0, CGFloat(canvas.width), CGFloat(canvas.height))
-        self.view.layer!.contents = canvas.imageView.image?.CGImageForProposedRect(&imageRect, context: NSGraphicsContext.currentContext(), hints: nil)
+        self.view.layer!.contents = canvas.imageView.image?.cgImage(forProposedRect: &imageRect, context: NSGraphicsContext.current(), hints: nil)
         
     }
     

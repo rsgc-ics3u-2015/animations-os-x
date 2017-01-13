@@ -1,7 +1,7 @@
 import Cocoa
 import Foundation
 
-public class Color {
+open class Color {
     
     // FIXME: Need more research into how to properly write a class that handles invalid property geting/setting
     //
@@ -91,12 +91,12 @@ public class Color {
     }
     
     // Takes a given number of degrees and translates to range between 0 and 360
-    private func rationalizeToSinglePositiveRotation(value : Float) -> Float {
+    fileprivate func rationalizeToSinglePositiveRotation(_ value : Float) -> Float {
         
         if value < 0 {
             return 0.0
         } else if value > 360 {
-            return value % 360
+            return value.truncatingRemainder(dividingBy: 360)
         }
         
         return value
@@ -104,12 +104,12 @@ public class Color {
     }
     
     // Takes a given value and translates to a percentage between 0 and 100
-    private func rationalizePercentage(value : Float) -> Float {
+    fileprivate func rationalizePercentage(_ value : Float) -> Float {
         
         if value < 0 {
             return 0.0
         } else if value > 100 {
-            return value % 100
+            return value.truncatingRemainder(dividingBy: 100)
         }
         
         return value
@@ -118,7 +118,15 @@ public class Color {
     
 }
 
-public class Canvas : CustomPlaygroundQuickLookable {
+open class Canvas : CustomPlaygroundQuickLookable {
+    
+    /// A custom playground Quick Look for this instance.
+    ///
+    /// If this type has value semantics, the `PlaygroundQuickLook` instance
+    /// should be unaffected by subsequent mutations.
+    public var customPlaygroundQuickLook: PlaygroundQuickLook {
+        return .image(self.imageView)
+    }
     
     // Frame rate for animation on this canvas
     var framesPerSecond : Int = 60 {
@@ -134,10 +142,10 @@ public class Canvas : CustomPlaygroundQuickLookable {
     var frameCount : Int = 0
     
     // Image view that will display our image
-    public var imageView: NSImageView = NSImageView()
+    open var imageView: NSImageView = NSImageView()
     
     // default line width
-    public var defaultLineWidth: Int = 1 {
+    open var defaultLineWidth: Int = 1 {
         didSet {
             // Ensure rational line width set
             if (defaultLineWidth < 0) {
@@ -147,10 +155,10 @@ public class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Line color, default is black
-    public var lineColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
+    open var lineColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     
     // Border width for closed shapes
-    public var defaultBorderWidth: Int = 1 {
+    open var defaultBorderWidth: Int = 1 {
         didSet {
             // Ensure rational border width set
             if (defaultBorderWidth < 0) {
@@ -160,27 +168,27 @@ public class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Border color, default is black
-    public var borderColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
+    open var borderColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     
     // Fill color, default is black
-    public var fillColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
-
+    open var fillColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
+    
     // Text color, default is black
-    public var textColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
+    open var textColor: Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     
     // Whether to draw shapes with borders
-    public var drawShapesWithBorders: Bool = true
+    open var drawShapesWithBorders: Bool = true
     
     // Whether to draw shapes with fill
-    public var drawShapesWithFill: Bool = true
+    open var drawShapesWithFill: Bool = true
     
     // Size of canvas
-    public let width : Int
-    public let height : Int
+    open let width : Int
+    open let height : Int
     
     // Current location of mouse on canvas
-    public var mouseX : Float = 0.0
-    public var mouseY : Float = 0.0
+    open var mouseX : Float = 0.0
+    open var mouseY : Float = 0.0
     
     // Initialization of object based on this class
     public init(width: Int, height: Int) {
@@ -207,7 +215,7 @@ public class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Draw text on the image
-    public func drawText(message message: String, size: Int = 24, x: Int = 0, y: Int = 0)  {
+    open func drawText(message: String, size: Int = 24, x: Int = 0, y: Int = 0)  {
         
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
@@ -232,12 +240,12 @@ public class Canvas : CustomPlaygroundQuickLookable {
             let attributes: [String : AnyObject] = [
                 NSForegroundColorAttributeName: fieldColor,
                 NSParagraphStyleAttributeName: paraStyle,
-                NSObliquenessAttributeName: skew,
+                NSObliquenessAttributeName: skew as AnyObject,
                 NSFontAttributeName: fieldFont!
             ]
             
             // Draw the string
-            string.drawAtPoint(NSPoint(x: x, y: y), withAttributes: attributes)
+            string.draw(at: NSPoint(x: x, y: y), withAttributes: attributes)
             
             // Stop drawing to the image
             self.imageView.image!.unlockFocus()
@@ -246,7 +254,7 @@ public class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Draw a line on the image
-    public func drawLine(fromX fromX: Int, fromY: Int, toX: Int, toY: Int, lineWidth: Int = 0) -> NSBezierPath {
+    open func drawLine(fromX: Int, fromY: Int, toX: Int, toY: Int, lineWidth: Int = 0) {
         
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
@@ -263,8 +271,8 @@ public class Canvas : CustomPlaygroundQuickLookable {
             }
             
             // Define the line
-            path.moveToPoint(NSPoint(x: fromX, y: fromY))
-            path.lineToPoint(NSPoint(x: toX, y: toY))
+            path.move(to: NSPoint(x: fromX, y: fromY))
+            path.line(to: NSPoint(x: toX, y: toY))
             
             // Set the line's color
             NSColor(hue: lineColor.translatedHue, saturation: lineColor.translatedSaturation, brightness: lineColor.translatedBrightness, alpha: lineColor.translatedAlpha).setStroke()
@@ -275,26 +283,17 @@ public class Canvas : CustomPlaygroundQuickLookable {
             // Stop drawing to the image
             self.imageView.image!.unlockFocus()
             
-            // Show the path created (this improves QuickLook results in Swift Playground)
-            return path
-            
-        } else {
-            
-            // If an error occured, return an empty path
-            return NSBezierPath()
-            
         }
-        
     }
     
     // Draw an ellipse on the image
-    public func drawEllipse(centreX centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 0) -> NSBezierPath {
+    open func drawEllipse(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 0) {
         
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
             
             // Make the new path
-            let path = NSBezierPath(ovalInRect: NSRect(x: centreX - width/2, y: centreY - height/2, width: width, height: height))
+            let path = NSBezierPath(ovalIn: NSRect(x: centreX - width/2, y: centreY - height/2, width: width, height: height))
             
             // Set width of border
             if borderWidth > 0 {
@@ -322,19 +321,11 @@ public class Canvas : CustomPlaygroundQuickLookable {
             // Stop drawing to the image
             self.imageView.image!.unlockFocus()
             
-            // Show the path created (this improves QuickLook results in Swift Playground)
-            return path
-            
-        } else {
-            
-            // If an error occured, return an empty path
-            return NSBezierPath()
-            
         }
     }
     
     // Draw a rectangle on the image
-    public func drawRectangle(bottomRightX bottomRightX: Int, bottomRightY: Int, width: Int, height: Int, borderWidth: Int = 1) -> NSBezierPath {
+    open func drawRectangle(bottomLeftX: Int, bottomLeftY: Int, width: Int, height: Int, borderWidth: Int = 1) {
         
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
@@ -350,11 +341,11 @@ public class Canvas : CustomPlaygroundQuickLookable {
             }
             
             // Define the path
-            path.moveToPoint(NSPoint(x: bottomRightX, y: bottomRightY))
-            path.lineToPoint(NSPoint(x: bottomRightX + width, y: bottomRightY))
-            path.lineToPoint(NSPoint(x: bottomRightX + width, y: bottomRightY + height))
-            path.lineToPoint(NSPoint(x: bottomRightX, y: bottomRightY + height))
-            path.lineToPoint(NSPoint(x: bottomRightX, y: bottomRightY))
+            path.move(to: NSPoint(x: bottomLeftX, y: bottomLeftY))
+            path.line(to: NSPoint(x: bottomLeftX + width, y: bottomLeftY))
+            path.line(to: NSPoint(x: bottomLeftX + width, y: bottomLeftY + height))
+            path.line(to: NSPoint(x: bottomLeftX, y: bottomLeftY + height))
+            path.line(to: NSPoint(x: bottomLeftX, y: bottomLeftY))
             
             // Set rectangle border color
             NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
@@ -375,20 +366,8 @@ public class Canvas : CustomPlaygroundQuickLookable {
             // Stop drawing to the image
             self.imageView.image!.unlockFocus()
             
-            // Show the path created (this improves QuickLook results in Swift Playground)
-            return path
-            
-        } else {
-            
-            // If an error occured, return an empty path
-            return NSBezierPath()
-            
         }
-        
     }
     
-    public func customPlaygroundQuickLook() -> PlaygroundQuickLook {
-        return .Image(self.imageView)
-    }
     
 }
