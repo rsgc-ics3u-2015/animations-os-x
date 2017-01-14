@@ -41,6 +41,16 @@ open class Color {
     //
     // Future self – something to think about.
     
+    // Static properties for convenience for basic colors
+    public static let black : Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
+    public static let white : Color = Color(hue: 0, saturation: 0, brightness: 100, alpha: 100)
+    public static let red : Color = Color(hue: 0, saturation: 100, brightness: 50, alpha: 100)
+    public static let orange : Color = Color(hue: 30, saturation: 100, brightness: 50, alpha: 100)
+    public static let yellow : Color = Color(hue: 60, saturation: 100, brightness: 50, alpha: 100)
+    public static let green : Color = Color(hue: 120, saturation: 100, brightness: 50, alpha: 100)
+    public static let blue : Color = Color(hue: 240, saturation: 100, brightness: 50, alpha: 100)
+    public static let purple : Color = Color(hue: 270, saturation: 100, brightness: 50, alpha: 100)
+    
     var hue: Float = 0.0 {
         didSet {
             hue = self.rationalizeToSinglePositiveRotation(hue)
@@ -211,6 +221,13 @@ open class Canvas : CustomPlaygroundQuickLookable {
         
         // Set this (currently blank) image so that it is displayed by the image view
         self.imageView.image = image
+        
+        // Make the background white
+        self.fillColor = Color.white
+        self.drawShapesWithBorders = false
+        self.drawRectangle(bottomLeftX: 0, bottomLeftY: 0, width: self.width, height: self.height)
+        self.fillColor = Color.black
+        self.drawShapesWithBorders = true
         
     }
     
