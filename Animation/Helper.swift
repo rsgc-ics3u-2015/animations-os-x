@@ -44,12 +44,12 @@ open class Color {
     // Static properties for convenience for basic colors
     public static let black : Color = Color(hue: 0, saturation: 0, brightness: 0, alpha: 100)
     public static let white : Color = Color(hue: 0, saturation: 0, brightness: 100, alpha: 100)
-    public static let red : Color = Color(hue: 0, saturation: 100, brightness: 50, alpha: 100)
-    public static let orange : Color = Color(hue: 30, saturation: 100, brightness: 50, alpha: 100)
-    public static let yellow : Color = Color(hue: 60, saturation: 100, brightness: 50, alpha: 100)
-    public static let green : Color = Color(hue: 120, saturation: 100, brightness: 50, alpha: 100)
-    public static let blue : Color = Color(hue: 240, saturation: 100, brightness: 50, alpha: 100)
-    public static let purple : Color = Color(hue: 270, saturation: 100, brightness: 50, alpha: 100)
+    public static let red : Color = Color(hue: 0, saturation: 80, brightness: 90, alpha: 100)
+    public static let orange : Color = Color(hue: 30, saturation: 80, brightness: 90, alpha: 100)
+    public static let yellow : Color = Color(hue: 60, saturation: 80, brightness: 90, alpha: 100)
+    public static let green : Color = Color(hue: 120, saturation: 80, brightness: 90, alpha: 100)
+    public static let blue : Color = Color(hue: 240, saturation: 80, brightness: 90, alpha: 100)
+    public static let purple : Color = Color(hue: 270, saturation: 80, brightness: 90, alpha: 100)
     
     var hue: Float = 0.0 {
         didSet {
