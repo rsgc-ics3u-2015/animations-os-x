@@ -100,6 +100,13 @@ open class Color {
         
     }
     
+    // Allow integer inputs to be used to set color values as well
+    public convenience init(hue: Int, saturation: Int, brightness: Int, alpha: Int) {
+        
+        self.init(hue: Float(hue), saturation: Float(saturation), brightness: Float(brightness), alpha: Float(alpha))
+        
+    }
+    
     // Takes a given number of degrees and translates to range between 0 and 360
     fileprivate func rationalizeToSinglePositiveRotation(_ value : Float) -> Float {
         
