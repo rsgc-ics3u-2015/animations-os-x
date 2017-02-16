@@ -393,5 +393,13 @@ open class Canvas : CustomPlaygroundQuickLookable {
         }
     }
     
+    // Convenience method to draw rectangle from it's centre point
+    open func drawRectangle(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 1) {
+        
+        // Call the original method but with points translated
+        self.drawRectangle(bottomLeftX: centreX - width / 2, bottomLeftY: centreY - height / 2, width: width, height: height, borderWidth: borderWidth)
+        
+    }
+    
     
 }
