@@ -293,13 +293,13 @@ open class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Draw a line on the image
-    open func drawLine(fromX: Int, fromY: Int, toX: Int, toY: Int, lineWidth: Int = 0) {
+    open func drawLine(fromX: Int, fromY: Int, toX: Int, toY: Int, lineWidth: Int = 0, capStyle : NSLineCapStyle = NSLineCapStyle.squareLineCapStyle) {
         
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
             
-            
-            // Make the new path
+            // Make the new path with the specified cap style
+            NSBezierPath.setDefaultLineCapStyle(capStyle)
             let path = NSBezierPath()
             
             // Set width of border
