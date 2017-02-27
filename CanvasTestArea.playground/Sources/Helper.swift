@@ -16,6 +16,18 @@ public func random(from : Int, toButNotIncluding : Int) -> Int {
     
 }
 
+/**
+ Used to set scale factor for the canvas.
+ 
+ Standard should generally be used. When quality level is set to High or Ultra, the time required to generate the canvas is *significantly* increased. Only use a quality level other than standard when generating image output for printing.
+ 
+ */
+public enum Quality : Int {
+    case Standard = 1
+    case High = 2
+    case Ultra = 4
+}
+
 open class Color {
     
     // FIXME: Need more research into how to properly write a class that handles invalid property geting/setting
@@ -183,6 +195,10 @@ open class Canvas : CustomPlaygroundQuickLookable {
             if (defaultLineWidth < 0) {
                 defaultLineWidth = 1
             }
+            
+            // Set the width based on the canvas scale factor
+            defaultLineWidth *= scale
+            
         }
     }
     
@@ -196,6 +212,9 @@ open class Canvas : CustomPlaygroundQuickLookable {
             if (defaultBorderWidth < 0) {
                 defaultBorderWidth = 1
             }
+            
+            // Set the width based on the canvas scale factor
+            defaultBorderWidth *= scale
         }
     }
     
@@ -222,12 +241,18 @@ open class Canvas : CustomPlaygroundQuickLookable {
     open var mouseX : Float = 0.0
     open var mouseY : Float = 0.0
     
+    // Scale factor for drawing
+    open var scale : Int = 1
+    
     // Initialization of object based on this class
-    public init(width: Int, height: Int) {
+    public init(width: Int, height: Int, quality : Quality = Quality.Standard) {
+        
+        // Set the canvas scale factor
+        self.scale = quality.rawValue
         
         // Set the width and height of the canvas
-        self.width = width
-        self.height = height
+        self.width = width * self.scale
+        self.height = height * self.scale
         
         // Create the frame that defines boundaries of the image view to be used
         let frameRect = NSRect(x: 0, y: 0, width: self.width, height: self.height)
@@ -251,10 +276,21 @@ open class Canvas : CustomPlaygroundQuickLookable {
         self.fillColor = Color.black
         self.drawShapesWithBorders = true
         
+        // Set the canvas scale factor
+        self.scale = quality.rawValue
+        
     }
     
     // Draw text on the image
     open func drawText(message: String, size: Int = 24, x: Int = 0, y: Int = 0)  {
+        
+        // Set attributes of shape based on the canvas scale factor
+        var size = size
+        size *= scale
+        var x = x
+        x *= scale
+        var y = y
+        y *= scale
         
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
@@ -265,7 +301,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
             // set the text color to dark gray
             let fieldColor : NSColor = NSColor(hue: textColor.translatedHue, saturation: textColor.translatedSaturation, brightness: textColor.translatedBrightness, alpha: textColor.translatedAlpha)
             
-            // set the font to Helvetica Neue 18
+            // set the font to Helvetica Neue 24
             let fieldFont = NSFont(name: "Helvetica Neue", size: CGFloat(size))
             
             // set the line spacing to 1
@@ -294,6 +330,16 @@ open class Canvas : CustomPlaygroundQuickLookable {
     
     // Draw a line on the image
     open func drawLine(fromX: Int, fromY: Int, toX: Int, toY: Int, lineWidth: Int = 0, capStyle : NSLineCapStyle = NSLineCapStyle.squareLineCapStyle) {
+        
+        // Set attributes of shape based on the canvas scale factor
+        var fromX = fromX
+        fromX *= scale
+        var fromY = fromY
+        fromY *= scale
+        var toX = toX
+        toX *= scale
+        var toY = toY
+        toY *= scale
         
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
@@ -327,6 +373,18 @@ open class Canvas : CustomPlaygroundQuickLookable {
     
     // Draw an ellipse on the image
     open func drawEllipse(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 0) {
+        
+        // Set attributes of shape based on the canvas scale factor
+        var centreX = centreX
+        centreX *= scale
+        var centreY = centreY
+        centreY *= scale
+        var width = width
+        width *= scale
+        var height = height
+        height *= scale
+        var borderWidth = borderWidth
+        borderWidth *= scale
         
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
@@ -365,6 +423,18 @@ open class Canvas : CustomPlaygroundQuickLookable {
     
     // Draw a rectangle on the image
     open func drawRectangle(bottomLeftX: Int, bottomLeftY: Int, width: Int, height: Int, borderWidth: Int = 1) {
+        
+        // Set attributes of shape based on the canvas scale factor
+        var bottomLeftX = bottomLeftX
+        bottomLeftX *= scale
+        var bottomLeftY = bottomLeftY
+        bottomLeftY *= scale
+        var width = width
+        width *= scale
+        var height = height
+        height *= scale
+        var borderWidth = borderWidth
+        borderWidth *= scale
         
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
@@ -415,7 +485,6 @@ open class Canvas : CustomPlaygroundQuickLookable {
         self.drawRectangle(bottomLeftX: centreX - width / 2, bottomLeftY: centreY - height / 2, width: width, height: height, borderWidth: borderWidth)
         
     }
-    
     
     /**
      Copies the contents of the canvas to the clipboard.
