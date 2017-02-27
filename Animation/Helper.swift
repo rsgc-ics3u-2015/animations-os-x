@@ -416,4 +416,20 @@ open class Canvas : CustomPlaygroundQuickLookable {
         
     }
     
+    
+    /**
+     Copies the contents of the canvas to the clipboard.
+     
+     You can then paste the image into any other program, for example, Preview, and then save to disk.
+     
+     */
+    open func copyToClipboard() {
+        
+        let pasteBoard = NSPasteboard.general()
+        pasteBoard.clearContents()
+        pasteBoard.writeObjects([self.imageView.image!])
+        
+    }
+
+    
 }
