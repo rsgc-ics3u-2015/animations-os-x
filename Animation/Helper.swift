@@ -487,6 +487,62 @@ open class Canvas : CustomPlaygroundQuickLookable {
         
     }
     
+    // Draw a rounded rectangle on the image
+    open func drawRoundedRectangle(bottomLeftX: Int, bottomLeftY: Int, width: Int, height: Int, borderWidth: Int = 1, xRadius: Int = 10, yRadius : Int = 10) {
+        
+        // Set attributes of shape based on the canvas scale factor
+        var bottomLeftX = bottomLeftX
+        bottomLeftX *= scale
+        var bottomLeftY = bottomLeftY
+        bottomLeftY *= scale
+        var width = width
+        width *= scale
+        var height = height
+        height *= scale
+        var borderWidth = borderWidth
+        borderWidth *= scale
+        var xRadius = xRadius
+        xRadius *= scale
+        var yRadius = yRadius
+        yRadius *= scale
+        
+        // Make the new path
+        let path = NSBezierPath(roundedRect: NSRect(x: bottomLeftX, y: bottomLeftY, width: width, height: height), xRadius: CGFloat(xRadius), yRadius: CGFloat(yRadius))
+        
+        // Set width of border
+        if borderWidth > 1 * scale {
+            path.lineWidth = CGFloat(borderWidth)
+        } else {
+            path.lineWidth = CGFloat(self.defaultBorderWidth * scale)
+        }
+        
+        // Set rectangle border color
+        NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
+        
+        // Draw the rectangle border
+        if (self.drawShapesWithBorders == true) {
+            path.stroke()
+        }
+        
+        // Set rectangle fill color
+        NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
+        
+        // Fill the rectangle
+        if (self.drawShapesWithFill == true) {
+            path.fill()
+        }
+        
+    }
+    
+    // Convenience method to draw a roudned rectangle from it's centre point
+    open func drawRoundedRectangle(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 1, xRadius : Int = 10, yRadius : Int = 10) {
+        
+        // Call the original method but with points translated
+        self.drawRoundedRectangle(bottomLeftX: centreX - width / 2, bottomLeftY: centreY - height / 2, width: width, height: height, borderWidth: borderWidth, xRadius: xRadius, yRadius: yRadius)
+        
+    }
+    
+    
     open func rotate(by provided : Degrees) {
         
         let xform = NSAffineTransform()
