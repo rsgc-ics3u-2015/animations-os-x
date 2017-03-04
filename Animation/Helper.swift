@@ -374,7 +374,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Draw an ellipse on the image
-    open func drawEllipse(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 0) {
+    open func drawEllipse(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 0, rotateBy provided : Degrees = 0) {
         
         // Set attributes of shape based on the canvas scale factor
         var centreX = centreX
@@ -391,8 +391,17 @@ open class Canvas : CustomPlaygroundQuickLookable {
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
             
+            // Save current graphics state
+            NSGraphicsContext.saveGraphicsState()
+            
+            // Translate origin to centre of this shape and then rotate
+            let xform = NSAffineTransform()
+            xform.translateX(by: CGFloat(centreX), yBy: CGFloat(centreY))
+            xform.rotate(byDegrees: provided)
+            xform.concat()
+            
             // Make the new path
-            let path = NSBezierPath(ovalIn: NSRect(x: centreX - width/2, y: centreY - height/2, width: width, height: height))
+            let path = NSBezierPath(ovalIn: NSRect(x: -width/2, y: -height/2, width: width, height: height))
             
             // Set width of border
             if borderWidth > 0 {
@@ -416,6 +425,9 @@ open class Canvas : CustomPlaygroundQuickLookable {
             if (self.drawShapesWithFill == true) {
                 path.fill()
             }
+            
+            // Restore the prior graphics state
+            NSGraphicsContext.restoreGraphicsState()
             
             // Stop drawing to the image
             self.imageView.image!.unlockFocus()
