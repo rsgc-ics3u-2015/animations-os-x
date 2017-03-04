@@ -5,10 +5,10 @@ import PlaygroundSupport
 
 // Create a new canvas
 let canvas = Canvas(width: 300, height: 500)
-
-canvas.defaultLineWidth = 20
-canvas.drawLine(fromX: 50, fromY: 50, toX: 200, toY: 200)
-canvas.drawLine(fromX: 150, fromY: 50, toX: 300, toY: 200)
+canvas.highPerformance = true
+for i in 1...canvas.height / canvas.scale {
+    canvas.drawLine(fromX: 0, fromY: i, toX: canvas.width / canvas.scale, toY: i)
+}
 
 // This code is necessary to see the result in the Assistant Editor at right
 PlaygroundPage.current.liveView = canvas.imageView
