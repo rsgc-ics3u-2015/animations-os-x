@@ -391,7 +391,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Draw an ellipse on the image
-    open func drawEllipse(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 0, rotateBy provided : Degrees = 0) {
+    open func drawEllipse(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 0) {
         
         // Set attributes of shape based on the canvas scale factor
         var centreX = centreX
@@ -405,17 +405,8 @@ open class Canvas : CustomPlaygroundQuickLookable {
         var borderWidth = borderWidth
         borderWidth *= scale
         
-        // Save current graphics state
-        NSGraphicsContext.saveGraphicsState()
-        
-        // Translate origin to centre of this shape and then rotate
-        let xform = NSAffineTransform()
-        xform.translateX(by: CGFloat(centreX), yBy: CGFloat(centreY))
-        xform.rotate(byDegrees: provided)
-        xform.concat()
-        
         // Make the new path
-        let path = NSBezierPath(ovalIn: NSRect(x: -width/2, y: -height/2, width: width, height: height))
+        let path = NSBezierPath(ovalIn: NSRect(x: centreX - width/2, y: centreY - height/2, width: width, height: height))
         
         // Set width of border
         if borderWidth > 0 {
@@ -440,13 +431,10 @@ open class Canvas : CustomPlaygroundQuickLookable {
             path.fill()
         }
         
-        // Restore the prior graphics state
-        NSGraphicsContext.restoreGraphicsState()
-        
     }
     
     // Draw a rectangle on the image
-    open func drawRectangle(bottomLeftX: Int, bottomLeftY: Int, width: Int, height: Int, borderWidth: Int = 1, rotateBy provided : Degrees = 0) {
+    open func drawRectangle(bottomLeftX: Int, bottomLeftY: Int, width: Int, height: Int, borderWidth: Int = 1) {
         
         // Set attributes of shape based on the canvas scale factor
         var bottomLeftX = bottomLeftX
@@ -460,17 +448,8 @@ open class Canvas : CustomPlaygroundQuickLookable {
         var borderWidth = borderWidth
         borderWidth *= scale
         
-        // Save current graphics state
-        NSGraphicsContext.saveGraphicsState()
-        
-        // Translate origin to centre of this shape and then rotate
-        let xform = NSAffineTransform()
-        xform.translateX(by: CGFloat(bottomLeftX + width / 2), yBy: CGFloat(bottomLeftY + height / 2))
-        xform.rotate(byDegrees: provided)
-        xform.concat()
-        
         // Make the new path
-        let path = NSBezierPath()
+        let path = NSBezierPath(rect: NSRect(x: bottomLeftX, y: bottomLeftY, width: width, height: height))
         
         // Set width of border
         if borderWidth > 0 {
@@ -478,13 +457,6 @@ open class Canvas : CustomPlaygroundQuickLookable {
         } else {
             path.lineWidth = CGFloat(self.defaultBorderWidth)
         }
-        
-        // Define the path
-        path.move(to: NSPoint(x: -width/2, y: -height/2))
-        path.line(to: NSPoint(x: width/2, y: -height/2))
-        path.line(to: NSPoint(x: width/2, y: height/2))
-        path.line(to: NSPoint(x: -width/2, y: height/2))
-        path.line(to: NSPoint(x: -width/2, y: -height/2))
         
         // Set rectangle border color
         NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
@@ -494,7 +466,6 @@ open class Canvas : CustomPlaygroundQuickLookable {
             path.stroke()
         }
         
-        
         // Set rectangle fill color
         NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
         
@@ -503,17 +474,36 @@ open class Canvas : CustomPlaygroundQuickLookable {
             path.fill()
         }
         
-        // Restore the prior graphics state
-        NSGraphicsContext.restoreGraphicsState()
-        
     }
     
     // Convenience method to draw rectangle from it's centre point
-    open func drawRectangle(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 1, rotateBy provided : Degrees = 0) {
+    open func drawRectangle(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 1) {
         
         // Call the original method but with points translated
-        self.drawRectangle(bottomLeftX: centreX - width / 2, bottomLeftY: centreY - height / 2, width: width, height: height, borderWidth: borderWidth, rotateBy: provided)
+        self.drawRectangle(bottomLeftX: centreX - width / 2, bottomLeftY: centreY - height / 2, width: width, height: height, borderWidth: borderWidth)
         
+    }
+    
+    open func rotate(by provided : Degrees) {
+        
+        let xform = NSAffineTransform()
+        xform.rotate(byDegrees: provided)
+        xform.concat()
+        
+    }
+    
+    open func translate(byX: Int, byY: Int) {
+        let xform = NSAffineTransform()
+        xform.translateX(by: CGFloat(byX), yBy: CGFloat(byY))
+        xform.concat()
+    }
+    
+    open func saveState() {
+        NSGraphicsContext.saveGraphicsState()
+    }
+    
+    open func restoreState() {
+        NSGraphicsContext.restoreGraphicsState()
     }
     
     /**

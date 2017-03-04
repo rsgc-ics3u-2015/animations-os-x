@@ -449,7 +449,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         borderWidth *= scale
         
         // Make the new path
-        let path = NSBezierPath()
+        let path = NSBezierPath(rect: NSRect(x: bottomLeftX, y: bottomLeftY, width: width, height: height))
         
         // Set width of border
         if borderWidth > 0 {
@@ -457,13 +457,6 @@ open class Canvas : CustomPlaygroundQuickLookable {
         } else {
             path.lineWidth = CGFloat(self.defaultBorderWidth)
         }
-        
-        // Define the path
-        path.move(to: NSPoint(x: bottomLeftX, y: bottomLeftY))
-        path.line(to: NSPoint(x: bottomLeftX + width, y: bottomLeftY))
-        path.line(to: NSPoint(x: bottomLeftX + width, y: bottomLeftY + height))
-        path.line(to: NSPoint(x: bottomLeftX, y: bottomLeftY + height))
-        path.line(to: NSPoint(x: bottomLeftX, y: bottomLeftY))
         
         // Set rectangle border color
         NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
@@ -496,7 +489,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         let xform = NSAffineTransform()
         xform.rotate(byDegrees: provided)
         xform.concat()
-
+        
     }
     
     open func translate(byX: Int, byY: Int) {
