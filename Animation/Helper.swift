@@ -277,6 +277,9 @@ open class Canvas : CustomPlaygroundQuickLookable {
         return self.offscreenRep
     }
     
+    // Path for custom shapes
+    private var customPath : NSBezierPath
+    
     // Initialization of object based on this class
     public init(width: Int, height: Int, quality : Quality = Quality.Standard) {
         
@@ -303,6 +306,9 @@ open class Canvas : CustomPlaygroundQuickLookable {
         // Set the grpahics context to the offscreen bitmap
         NSGraphicsContext.setCurrent(NSGraphicsContext(bitmapImageRep: offscreenRep))
         
+        // Set the path for custom shapes to nothing to start
+        self.customPath = NSBezierPath()
+        
         // Make the background white
         self.fillColor = Color.white
         self.drawShapesWithBorders = false
@@ -312,6 +318,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         
         // Default to low performance mode (shows output after every draw call, better for debugging and student learning)
         self.privateImageView.image = NSImage(cgImage: offscreenRep.cgImage!, size: offscreenRep.size)
+        
         
     }
     
@@ -540,6 +547,57 @@ open class Canvas : CustomPlaygroundQuickLookable {
         
         // Call the original method but with points translated
         self.drawRoundedRectangle(bottomLeftX: centreX - width / 2, bottomLeftY: centreY - height / 2, width: width, height: height, borderWidth: borderWidth, xRadius: xRadius, yRadius: yRadius)
+        
+    }
+    
+    /**
+     Draws a closed polygon from the given vertices.
+     
+     - parameter vertices: An array of NSPoint instances defining the vertices of the figure.
+     
+     At least three vertices must be provided.
+     
+     */
+    open func drawCustomShape(with vertices : [NSPoint]) {
+        
+        // Ensure there are at least three vertices provided
+        if vertices.count < 3 {
+            return
+        }
+        
+        // Reset the custom path
+        customPath = NSBezierPath()
+        
+        // Start the custom path at given co-ordinates
+        customPath.move(to: vertices.first!)
+        
+        // Draw a line to each additional vertex
+        for vertex in vertices.dropFirst() {
+            customPath.line(to: vertex)
+        }
+        
+        // Draw a line back to the original vertex
+        customPath.line(to: vertices.first!)
+        customPath.close()
+        
+        // Set the width
+        customPath.lineWidth = CGFloat(self.defaultLineWidth)
+        
+        // Set shape's border color
+        NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
+        
+        // Draw the shape's border
+        if (self.drawShapesWithBorders == true) {
+            customPath.stroke()
+        }
+        
+        // Set shape's fill color
+        NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
+        
+        // Fill the custom shape
+        if (self.drawShapesWithFill == true) {
+            customPath.fill()
+        }
         
     }
     
