@@ -246,6 +246,9 @@ open class Canvas : CustomPlaygroundQuickLookable {
     // Scale factor for drawing
     open var scale : Int = 1
     
+    // Off screen drawing representation
+    var offscreenRep : NSBitmapImageRep
+    
     // Initialization of object based on this class
     public init(width: Int, height: Int, quality : Quality = Quality.Standard) {
         
@@ -262,21 +265,18 @@ open class Canvas : CustomPlaygroundQuickLookable {
         // Create the image view based on dimensions of frame created
         self.imageView = NSImageView(frame: frameRect)
         
-        // Define the size of the image that will be presented in the image view
-        let imageSize = NSMakeSize(CGFloat(self.width), CGFloat(self.height))
+        // Define the offscreen bitmap we will draw to
+        offscreenRep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: self.width, pixelsHigh: self.height, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSCalibratedRGBColorSpace, bytesPerRow: 4 * self.width, bitsPerPixel: 32)!
         
-        // Create the blank image that will be presented in the image view
-        let image = NSImage(size: imageSize)
+        // Set the grpahics context to the offscreen bitmap
+        NSGraphicsContext.setCurrent(NSGraphicsContext(bitmapImageRep: offscreenRep))
         
-        // Set this (currently blank) image so that it is displayed by the image view
-        self.imageView.image = image
-        
-        // Make the background white
-        self.fillColor = Color.white
-        self.drawShapesWithBorders = false
-        self.drawRectangle(bottomLeftX: 0, bottomLeftY: 0, width: self.width, height: self.height)
-        self.fillColor = Color.black
-        self.drawShapesWithBorders = true
+//        // Make the background white
+//        self.fillColor = Color.white
+//        self.drawShapesWithBorders = false
+//        self.drawRectangle(bottomLeftX: 0, bottomLeftY: 0, width: self.width, height: self.height)
+//        self.fillColor = Color.black
+//        self.drawShapesWithBorders = true
         
         // Set the canvas scale factor
         self.scale = quality.rawValue
@@ -343,34 +343,31 @@ open class Canvas : CustomPlaygroundQuickLookable {
         var toY = toY
         toY *= scale
         
-        // If an image has been defined for the image view, draw on it
-        if let _ = self.imageView.image?.lockFocus() {
-            
-            // Make the new path with the specified cap style
-            NSBezierPath.setDefaultLineCapStyle(capStyle)
-            let path = NSBezierPath()
-            
-            // Set width of border
-            if lineWidth > 0 {
-                path.lineWidth = CGFloat(lineWidth)
-            } else {
-                path.lineWidth = CGFloat(self.defaultLineWidth)
-            }
-            
-            // Define the line
-            path.move(to: NSPoint(x: fromX, y: fromY))
-            path.line(to: NSPoint(x: toX, y: toY))
-            
-            // Set the line's color
-            NSColor(hue: lineColor.translatedHue, saturation: lineColor.translatedSaturation, brightness: lineColor.translatedBrightness, alpha: lineColor.translatedAlpha).setStroke()
-            
-            // Draw the line
-            path.stroke()
-            
-            // Stop drawing to the image
-            self.imageView.image!.unlockFocus()
-            
+        // Make the new path with the specified cap style
+        NSBezierPath.setDefaultLineCapStyle(capStyle)
+        let path = NSBezierPath()
+        
+        // Set width of border
+        if lineWidth > 0 {
+            path.lineWidth = CGFloat(lineWidth)
+        } else {
+            path.lineWidth = CGFloat(self.defaultLineWidth)
         }
+        
+        // Define the line
+        path.move(to: NSPoint(x: fromX, y: fromY))
+        path.line(to: NSPoint(x: toX, y: toY))
+        
+        // Set the line's color
+        NSColor(hue: lineColor.translatedHue, saturation: lineColor.translatedSaturation, brightness: lineColor.translatedBrightness, alpha: lineColor.translatedAlpha).setStroke()
+        
+        // Draw the line
+        path.stroke()
+        
+        // Set this (currently blank) image so that it is displayed by the image view
+        self.imageView.image = NSImage(cgImage: offscreenRep.cgImage!, size: offscreenRep.size)
+
+        
     }
     
     // Draw an ellipse on the image
