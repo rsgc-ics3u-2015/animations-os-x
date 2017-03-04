@@ -366,6 +366,8 @@ open class Canvas : CustomPlaygroundQuickLookable {
         toX *= scale
         var toY = toY
         toY *= scale
+        var lineWidth = lineWidth
+        lineWidth *= scale
         
         // Make the new path with the specified cap style
         NSBezierPath.setDefaultLineCapStyle(capStyle)
@@ -412,7 +414,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         if borderWidth > 0 {
             path.lineWidth = CGFloat(borderWidth)
         } else {
-            path.lineWidth = CGFloat(self.defaultBorderWidth)
+            path.lineWidth = CGFloat(self.defaultBorderWidth * scale)
         }
         
         // Set ellipse border color
@@ -451,11 +453,12 @@ open class Canvas : CustomPlaygroundQuickLookable {
         // Make the new path
         let path = NSBezierPath(rect: NSRect(x: bottomLeftX, y: bottomLeftY, width: width, height: height))
         
+        
         // Set width of border
-        if borderWidth > 0 {
+        if borderWidth > 1 * scale {
             path.lineWidth = CGFloat(borderWidth)
         } else {
-            path.lineWidth = CGFloat(self.defaultBorderWidth)
+            path.lineWidth = CGFloat(self.defaultBorderWidth * scale)
         }
         
         // Set rectangle border color
