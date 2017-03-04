@@ -16,6 +16,8 @@ public func random(from : Int, toButNotIncluding : Int) -> Int {
     
 }
 
+public typealias Degrees = CGFloat
+
 /**
  Used to set scale factor for the canvas.
  
@@ -422,7 +424,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Draw a rectangle on the image
-    open func drawRectangle(bottomLeftX: Int, bottomLeftY: Int, width: Int, height: Int, borderWidth: Int = 1) {
+    open func drawRectangle(bottomLeftX: Int, bottomLeftY: Int, width: Int, height: Int, borderWidth: Int = 1, rotateBy provided : Degrees = 0) {
         
         // Set attributes of shape based on the canvas scale factor
         var bottomLeftX = bottomLeftX
@@ -439,6 +441,15 @@ open class Canvas : CustomPlaygroundQuickLookable {
         // If an image has been defined for the image view, draw on it
         if let _ = self.imageView.image?.lockFocus() {
             
+            // Save current graphics state
+            NSGraphicsContext.saveGraphicsState()
+            
+            // Translate origin to centre of this shape and then rotate
+            let xform = NSAffineTransform()
+            xform.translateX(by: CGFloat(bottomLeftX + width / 2), yBy: CGFloat(bottomLeftY + height / 2))
+            xform.rotate(byDegrees: provided)
+            xform.concat()
+            
             // Make the new path
             let path = NSBezierPath()
             
@@ -450,11 +461,11 @@ open class Canvas : CustomPlaygroundQuickLookable {
             }
             
             // Define the path
-            path.move(to: NSPoint(x: bottomLeftX, y: bottomLeftY))
-            path.line(to: NSPoint(x: bottomLeftX + width, y: bottomLeftY))
-            path.line(to: NSPoint(x: bottomLeftX + width, y: bottomLeftY + height))
-            path.line(to: NSPoint(x: bottomLeftX, y: bottomLeftY + height))
-            path.line(to: NSPoint(x: bottomLeftX, y: bottomLeftY))
+            path.move(to: NSPoint(x: -width/2, y: -height/2))
+            path.line(to: NSPoint(x: width/2, y: -height/2))
+            path.line(to: NSPoint(x: width/2, y: height/2))
+            path.line(to: NSPoint(x: -width/2, y: height/2))
+            path.line(to: NSPoint(x: -width/2, y: -height/2))
             
             // Set rectangle border color
             NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
@@ -464,6 +475,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
                 path.stroke()
             }
             
+            
             // Set rectangle fill color
             NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
             
@@ -472,6 +484,9 @@ open class Canvas : CustomPlaygroundQuickLookable {
                 path.fill()
             }
             
+            // Restore the prior graphics state
+            NSGraphicsContext.restoreGraphicsState()
+            
             // Stop drawing to the image
             self.imageView.image!.unlockFocus()
             
@@ -479,10 +494,10 @@ open class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Convenience method to draw rectangle from it's centre point
-    open func drawRectangle(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 1) {
+    open func drawRectangle(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 1, rotateBy provided : Degrees = 0) {
         
         // Call the original method but with points translated
-        self.drawRectangle(bottomLeftX: centreX - width / 2, bottomLeftY: centreY - height / 2, width: width, height: height, borderWidth: borderWidth)
+        self.drawRectangle(bottomLeftX: centreX - width / 2, bottomLeftY: centreY - height / 2, width: width, height: height, borderWidth: borderWidth, rotateBy: provided)
         
     }
     
