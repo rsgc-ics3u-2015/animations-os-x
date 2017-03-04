@@ -249,7 +249,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
     open var mouseY : Float = 0.0
     
     // Scale factor for drawing
-    open var scale : Int = 1
+    open let scale : Int
     
     /**
      Draw in high performance mode.
@@ -284,17 +284,21 @@ open class Canvas : CustomPlaygroundQuickLookable {
         self.scale = quality.rawValue
         
         // Set the width and height of the canvas
-        self.width = width * self.scale
-        self.height = height * self.scale
+        self.width = width
+        self.height = height
+        
+        // Set the default line and border widths
+        self.defaultLineWidth = 1 * self.scale
+        self.defaultBorderWidth = 1 * self.scale
         
         // Create the frame that defines boundaries of the image view to be used
-        let frameRect = NSRect(x: 0, y: 0, width: self.width, height: self.height)
+        let frameRect = NSRect(x: 0, y: 0, width: self.width * self.scale, height: self.height * self.scale)
         
         // Create the image view based on dimensions of frame created
         self.privateImageView = NSImageView(frame: frameRect)
         
         // Define the offscreen bitmap we will draw to
-        offscreenRep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: self.width, pixelsHigh: self.height, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSCalibratedRGBColorSpace, bytesPerRow: 4 * self.width, bitsPerPixel: 32)!
+        offscreenRep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: self.width * self.scale, pixelsHigh: self.height * self.scale, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSCalibratedRGBColorSpace, bytesPerRow: 4 * self.width * self.scale, bitsPerPixel: 32)!
         
         // Set the grpahics context to the offscreen bitmap
         NSGraphicsContext.setCurrent(NSGraphicsContext(bitmapImageRep: offscreenRep))
@@ -302,12 +306,9 @@ open class Canvas : CustomPlaygroundQuickLookable {
         // Make the background white
         self.fillColor = Color.white
         self.drawShapesWithBorders = false
-        self.drawRectangle(bottomLeftX: 0, bottomLeftY: 0, width: self.width, height: self.height)
+        self.drawRectangle(bottomLeftX: 0, bottomLeftY: 0, width: self.width * self.scale, height: self.height * self.scale)
         self.fillColor = Color.black
         self.drawShapesWithBorders = true
-        
-        // Set the canvas scale factor
-        self.scale = quality.rawValue
         
         // Default to low performance mode (shows output after every draw call, better for debugging and student learning)
         self.privateImageView.image = NSImage(cgImage: offscreenRep.cgImage!, size: offscreenRep.size)
