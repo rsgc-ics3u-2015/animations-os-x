@@ -171,7 +171,12 @@ open class Canvas : CustomPlaygroundQuickLookable {
     /// If this type has value semantics, the `PlaygroundQuickLook` instance
     /// should be unaffected by subsequent mutations.
     public var customPlaygroundQuickLook: PlaygroundQuickLook {
-        return .image(self.imageView)
+        return .image(self.privateImageView)
+    }
+    
+    public var imageView : NSImageView {
+        self.highPerformance = false
+        return self.privateImageView
     }
     
     // Frame rate for animation on this canvas
@@ -188,7 +193,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
     var frameCount : Int = 0
     
     // Image view that will display our image
-    open var imageView: NSImageView = NSImageView()
+    var privateImageView: NSImageView = NSImageView()
     
     // default line width
     open var defaultLineWidth: Int = 1 {
@@ -246,6 +251,32 @@ open class Canvas : CustomPlaygroundQuickLookable {
     // Scale factor for drawing
     open var scale : Int = 1
     
+    /**
+     Draw in high performance mode.
+     
+     When set to true, the canvas will not update after every draw call.
+     
+     */
+    open var highPerformance : Bool = false {
+        didSet {
+            if self.highPerformance {
+                
+                self.privateImageView.image = nil
+                
+            } else {
+                
+                self.privateImageView.image = NSImage(cgImage: offscreenRep.cgImage!, size: offscreenRep.size)
+                
+            }
+        }
+    }
+    
+    // Off screen drawing representation
+    private var offscreenRep : NSBitmapImageRep
+    public var offscreenRepresentation : NSBitmapImageRep {
+        return self.offscreenRep
+    }
+    
     // Initialization of object based on this class
     public init(width: Int, height: Int, quality : Quality = Quality.Standard) {
         
@@ -260,16 +291,13 @@ open class Canvas : CustomPlaygroundQuickLookable {
         let frameRect = NSRect(x: 0, y: 0, width: self.width, height: self.height)
         
         // Create the image view based on dimensions of frame created
-        self.imageView = NSImageView(frame: frameRect)
+        self.privateImageView = NSImageView(frame: frameRect)
         
-        // Define the size of the image that will be presented in the image view
-        let imageSize = NSMakeSize(CGFloat(self.width), CGFloat(self.height))
+        // Define the offscreen bitmap we will draw to
+        offscreenRep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: self.width, pixelsHigh: self.height, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSCalibratedRGBColorSpace, bytesPerRow: 4 * self.width, bitsPerPixel: 32)!
         
-        // Create the blank image that will be presented in the image view
-        let image = NSImage(size: imageSize)
-        
-        // Set this (currently blank) image so that it is displayed by the image view
-        self.imageView.image = image
+        // Set the grpahics context to the offscreen bitmap
+        NSGraphicsContext.setCurrent(NSGraphicsContext(bitmapImageRep: offscreenRep))
         
         // Make the background white
         self.fillColor = Color.white
@@ -280,6 +308,9 @@ open class Canvas : CustomPlaygroundQuickLookable {
         
         // Set the canvas scale factor
         self.scale = quality.rawValue
+        
+        // Default to low performance mode (shows output after every draw call, better for debugging and student learning)
+        self.privateImageView.image = NSImage(cgImage: offscreenRep.cgImage!, size: offscreenRep.size)
         
     }
     
@@ -294,40 +325,33 @@ open class Canvas : CustomPlaygroundQuickLookable {
         var y = y
         y *= scale
         
-        // If an image has been defined for the image view, draw on it
-        if let _ = self.imageView.image?.lockFocus() {
-            
-            // Convert the provided String object to an NSString object
-            let string: NSString = NSString(string: message)
-            
-            // set the text color to dark gray
-            let fieldColor : NSColor = NSColor(hue: textColor.translatedHue, saturation: textColor.translatedSaturation, brightness: textColor.translatedBrightness, alpha: textColor.translatedAlpha)
-            
-            // set the font to Helvetica Neue 24
-            let fieldFont = NSFont(name: "Helvetica Neue", size: CGFloat(size))
-            
-            // set the line spacing to 1
-            let paraStyle = NSMutableParagraphStyle()
-            paraStyle.lineSpacing = 1.0
-            
-            // set the Obliqueness (tilt of text) to 0.0
-            let skew = 0.0
-            
-            // create dictionary with attributes of the string to be drawn
-            let attributes: [String : AnyObject] = [
-                NSForegroundColorAttributeName: fieldColor,
-                NSParagraphStyleAttributeName: paraStyle,
-                NSObliquenessAttributeName: skew as AnyObject,
-                NSFontAttributeName: fieldFont!
-            ]
-            
-            // Draw the string
-            string.draw(at: NSPoint(x: x, y: y), withAttributes: attributes)
-            
-            // Stop drawing to the image
-            self.imageView.image!.unlockFocus()
-            
-        }
+        // Convert the provided String object to an NSString object
+        let string: NSString = NSString(string: message)
+        
+        // set the text color to dark gray
+        let fieldColor : NSColor = NSColor(hue: textColor.translatedHue, saturation: textColor.translatedSaturation, brightness: textColor.translatedBrightness, alpha: textColor.translatedAlpha)
+        
+        // set the font to Helvetica Neue 24
+        let fieldFont = NSFont(name: "Helvetica Neue", size: CGFloat(size))
+        
+        // set the line spacing to 1
+        let paraStyle = NSMutableParagraphStyle()
+        paraStyle.lineSpacing = 1.0
+        
+        // set the Obliqueness (tilt of text) to 0.0
+        let skew = 0.0
+        
+        // create dictionary with attributes of the string to be drawn
+        let attributes: [String : AnyObject] = [
+            NSForegroundColorAttributeName: fieldColor,
+            NSParagraphStyleAttributeName: paraStyle,
+            NSObliquenessAttributeName: skew as AnyObject,
+            NSFontAttributeName: fieldFont!
+        ]
+        
+        // Draw the string
+        string.draw(at: NSPoint(x: x, y: y), withAttributes: attributes)
+        
     }
     
     // Draw a line on the image
@@ -343,34 +367,27 @@ open class Canvas : CustomPlaygroundQuickLookable {
         var toY = toY
         toY *= scale
         
-        // If an image has been defined for the image view, draw on it
-        if let _ = self.imageView.image?.lockFocus() {
-            
-            // Make the new path with the specified cap style
-            NSBezierPath.setDefaultLineCapStyle(capStyle)
-            let path = NSBezierPath()
-            
-            // Set width of border
-            if lineWidth > 0 {
-                path.lineWidth = CGFloat(lineWidth)
-            } else {
-                path.lineWidth = CGFloat(self.defaultLineWidth)
-            }
-            
-            // Define the line
-            path.move(to: NSPoint(x: fromX, y: fromY))
-            path.line(to: NSPoint(x: toX, y: toY))
-            
-            // Set the line's color
-            NSColor(hue: lineColor.translatedHue, saturation: lineColor.translatedSaturation, brightness: lineColor.translatedBrightness, alpha: lineColor.translatedAlpha).setStroke()
-            
-            // Draw the line
-            path.stroke()
-            
-            // Stop drawing to the image
-            self.imageView.image!.unlockFocus()
-            
+        // Make the new path with the specified cap style
+        NSBezierPath.setDefaultLineCapStyle(capStyle)
+        let path = NSBezierPath()
+        
+        // Set width of border
+        if lineWidth > 0 {
+            path.lineWidth = CGFloat(lineWidth)
+        } else {
+            path.lineWidth = CGFloat(self.defaultLineWidth)
         }
+        
+        // Define the line
+        path.move(to: NSPoint(x: fromX, y: fromY))
+        path.line(to: NSPoint(x: toX, y: toY))
+        
+        // Set the line's color
+        NSColor(hue: lineColor.translatedHue, saturation: lineColor.translatedSaturation, brightness: lineColor.translatedBrightness, alpha: lineColor.translatedAlpha).setStroke()
+        
+        // Draw the line
+        path.stroke()
+        
     }
     
     // Draw an ellipse on the image
@@ -388,51 +405,44 @@ open class Canvas : CustomPlaygroundQuickLookable {
         var borderWidth = borderWidth
         borderWidth *= scale
         
-        // If an image has been defined for the image view, draw on it
-        if let _ = self.imageView.image?.lockFocus() {
-            
-            // Save current graphics state
-            NSGraphicsContext.saveGraphicsState()
-            
-            // Translate origin to centre of this shape and then rotate
-            let xform = NSAffineTransform()
-            xform.translateX(by: CGFloat(centreX), yBy: CGFloat(centreY))
-            xform.rotate(byDegrees: provided)
-            xform.concat()
-            
-            // Make the new path
-            let path = NSBezierPath(ovalIn: NSRect(x: -width/2, y: -height/2, width: width, height: height))
-            
-            // Set width of border
-            if borderWidth > 0 {
-                path.lineWidth = CGFloat(borderWidth)
-            } else {
-                path.lineWidth = CGFloat(self.defaultBorderWidth)
-            }
-            
-            // Set ellipse border color
-            NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
-            
-            // Draw the ellipse border
-            if (self.drawShapesWithBorders == true) {
-                path.stroke()
-            }
-            
-            // Set ellipse fill color
-            NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
-            
-            // Fill the ellipse
-            if (self.drawShapesWithFill == true) {
-                path.fill()
-            }
-            
-            // Restore the prior graphics state
-            NSGraphicsContext.restoreGraphicsState()
-            
-            // Stop drawing to the image
-            self.imageView.image!.unlockFocus()
-            
+        // Save current graphics state
+        NSGraphicsContext.saveGraphicsState()
+        
+        // Translate origin to centre of this shape and then rotate
+        let xform = NSAffineTransform()
+        xform.translateX(by: CGFloat(centreX), yBy: CGFloat(centreY))
+        xform.rotate(byDegrees: provided)
+        xform.concat()
+        
+        // Make the new path
+        let path = NSBezierPath(ovalIn: NSRect(x: -width/2, y: -height/2, width: width, height: height))
+        
+        // Set width of border
+        if borderWidth > 0 {
+            path.lineWidth = CGFloat(borderWidth)
+        } else {
+            path.lineWidth = CGFloat(self.defaultBorderWidth)
         }
+        
+        // Set ellipse border color
+        NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
+        
+        // Draw the ellipse border
+        if (self.drawShapesWithBorders == true) {
+            path.stroke()
+        }
+        
+        // Set ellipse fill color
+        NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
+        
+        // Fill the ellipse
+        if (self.drawShapesWithFill == true) {
+            path.fill()
+        }
+        
+        // Restore the prior graphics state
+        NSGraphicsContext.restoreGraphicsState()
+        
     }
     
     // Draw a rectangle on the image
@@ -450,59 +460,52 @@ open class Canvas : CustomPlaygroundQuickLookable {
         var borderWidth = borderWidth
         borderWidth *= scale
         
-        // If an image has been defined for the image view, draw on it
-        if let _ = self.imageView.image?.lockFocus() {
-            
-            // Save current graphics state
-            NSGraphicsContext.saveGraphicsState()
-            
-            // Translate origin to centre of this shape and then rotate
-            let xform = NSAffineTransform()
-            xform.translateX(by: CGFloat(bottomLeftX + width / 2), yBy: CGFloat(bottomLeftY + height / 2))
-            xform.rotate(byDegrees: provided)
-            xform.concat()
-            
-            // Make the new path
-            let path = NSBezierPath()
-            
-            // Set width of border
-            if borderWidth > 0 {
-                path.lineWidth = CGFloat(borderWidth)
-            } else {
-                path.lineWidth = CGFloat(self.defaultBorderWidth)
-            }
-            
-            // Define the path
-            path.move(to: NSPoint(x: -width/2, y: -height/2))
-            path.line(to: NSPoint(x: width/2, y: -height/2))
-            path.line(to: NSPoint(x: width/2, y: height/2))
-            path.line(to: NSPoint(x: -width/2, y: height/2))
-            path.line(to: NSPoint(x: -width/2, y: -height/2))
-            
-            // Set rectangle border color
-            NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
-            
-            // Draw the rectangle border
-            if (self.drawShapesWithBorders == true) {
-                path.stroke()
-            }
-            
-            
-            // Set rectangle fill color
-            NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
-            
-            // Fill the rectangle
-            if (self.drawShapesWithFill == true) {
-                path.fill()
-            }
-            
-            // Restore the prior graphics state
-            NSGraphicsContext.restoreGraphicsState()
-            
-            // Stop drawing to the image
-            self.imageView.image!.unlockFocus()
-            
+        // Save current graphics state
+        NSGraphicsContext.saveGraphicsState()
+        
+        // Translate origin to centre of this shape and then rotate
+        let xform = NSAffineTransform()
+        xform.translateX(by: CGFloat(bottomLeftX + width / 2), yBy: CGFloat(bottomLeftY + height / 2))
+        xform.rotate(byDegrees: provided)
+        xform.concat()
+        
+        // Make the new path
+        let path = NSBezierPath()
+        
+        // Set width of border
+        if borderWidth > 0 {
+            path.lineWidth = CGFloat(borderWidth)
+        } else {
+            path.lineWidth = CGFloat(self.defaultBorderWidth)
         }
+        
+        // Define the path
+        path.move(to: NSPoint(x: -width/2, y: -height/2))
+        path.line(to: NSPoint(x: width/2, y: -height/2))
+        path.line(to: NSPoint(x: width/2, y: height/2))
+        path.line(to: NSPoint(x: -width/2, y: height/2))
+        path.line(to: NSPoint(x: -width/2, y: -height/2))
+        
+        // Set rectangle border color
+        NSColor(hue: borderColor.translatedHue, saturation: borderColor.translatedSaturation, brightness: borderColor.translatedBrightness, alpha: borderColor.translatedAlpha).setStroke()
+        
+        // Draw the rectangle border
+        if (self.drawShapesWithBorders == true) {
+            path.stroke()
+        }
+        
+        
+        // Set rectangle fill color
+        NSColor(hue: fillColor.translatedHue, saturation: fillColor.translatedSaturation, brightness: fillColor.translatedBrightness, alpha: fillColor.translatedAlpha).setFill()
+        
+        // Fill the rectangle
+        if (self.drawShapesWithFill == true) {
+            path.fill()
+        }
+        
+        // Restore the prior graphics state
+        NSGraphicsContext.restoreGraphicsState()
+        
     }
     
     // Convenience method to draw rectangle from it's centre point
@@ -523,7 +526,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         
         let pasteBoard = NSPasteboard.general()
         pasteBoard.clearContents()
-        pasteBoard.writeObjects([self.imageView.image!])
+        pasteBoard.writeObjects([self.privateImageView.image!])
         
     }
     

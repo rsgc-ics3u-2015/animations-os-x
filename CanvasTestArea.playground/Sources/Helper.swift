@@ -272,7 +272,10 @@ open class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Off screen drawing representation
-    var offscreenRep : NSBitmapImageRep
+    private var offscreenRep : NSBitmapImageRep
+    public var offscreenRepresentation : NSBitmapImageRep {
+        return self.offscreenRep
+    }
     
     // Initialization of object based on this class
     public init(width: Int, height: Int, quality : Quality = Quality.Standard) {

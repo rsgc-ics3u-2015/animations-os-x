@@ -38,7 +38,7 @@ class Sketch : NSObject {
     override init() {
         
         // Create canvas object – specify size
-        canvas = Canvas(width: 500, height: 300, quality: Quality.High)
+        canvas = Canvas(width: 500, height: 300)
         
         // The frame rate can be adjusted; the default is 60 fps
         canvas.framesPerSecond = 60
@@ -98,7 +98,6 @@ class Sketch : NSObject {
         // Draw the agent in it's new position
         canvas.fillColor = Color(hue: 0, saturation: 0, brightness: 0, alpha: 25)
         canvas.drawEllipse(centreX: x, centreY: y, width: diameter, height: diameter)
-        
     }
     
     // Respond to the mouseDown event
