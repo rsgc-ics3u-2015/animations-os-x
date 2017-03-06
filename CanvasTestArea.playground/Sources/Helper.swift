@@ -305,7 +305,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         
         // Set the grpahics context to the offscreen bitmap
         NSGraphicsContext.setCurrent(NSGraphicsContext(bitmapImageRep: offscreenRep))
-
+        
         // Set the path for custom shapes to nothing to start
         self.customPath = NSBezierPath()
         
@@ -315,7 +315,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         self.drawRectangle(bottomLeftX: 0, bottomLeftY: 0, width: self.width * self.scale, height: self.height * self.scale)
         self.fillColor = Color.black
         self.drawShapesWithBorders = true
-                
+        
         // Default to low performance mode (shows output after every draw call, better for debugging and student learning)
         self.privateImageView.image = NSImage(cgImage: offscreenRep.cgImage!, size: offscreenRep.size)
         
@@ -387,7 +387,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         } else {
             path.lineWidth = CGFloat(self.defaultLineWidth)
         }
-
+        
         // Define the line
         path.move(to: NSPoint(x: fromX, y: fromY))
         path.line(to: NSPoint(x: toX, y: toY))
@@ -541,7 +541,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         }
         
     }
-
+    
     // Convenience method to draw a roudned rectangle from it's centre point
     open func drawRoundedRectangle(centreX: Int, centreY: Int, width: Int, height: Int, borderWidth: Int = 1, xRadius : Int = 10, yRadius : Int = 10) {
         
@@ -564,13 +564,13 @@ open class Canvas : CustomPlaygroundQuickLookable {
         if vertices.count < 3 {
             return
         }
-
+        
         // Reset the custom path
         customPath = NSBezierPath()
         
         // Start the custom path at given co-ordinates
         customPath.move(to: vertices.first!)
-    
+        
         // Draw a line to each additional vertex
         for vertex in vertices.dropFirst() {
             customPath.line(to: vertex)
@@ -600,7 +600,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         }
         
     }
-
+    
     
     open func rotate(by provided : Degrees) {
         
@@ -611,6 +611,12 @@ open class Canvas : CustomPlaygroundQuickLookable {
     }
     
     open func translate(byX: Int, byY: Int) {
+        
+        var byX = byX
+        byX *= scale
+        var byY = byY
+        byY *= scale
+        
         let xform = NSAffineTransform()
         xform.translateX(by: CGFloat(byX), yBy: CGFloat(byY))
         xform.concat()

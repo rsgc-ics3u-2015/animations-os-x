@@ -611,6 +611,12 @@ open class Canvas : CustomPlaygroundQuickLookable {
     }
     
     open func translate(byX: Int, byY: Int) {
+        
+        var byX = byX
+        byX *= scale
+        var byY = byY
+        byY *= scale
+        
         let xform = NSAffineTransform()
         xform.translateX(by: CGFloat(byX), yBy: CGFloat(byY))
         xform.concat()
