@@ -560,18 +560,18 @@ open class Canvas : CustomPlaygroundQuickLookable {
         }
         
         // Reset the custom path
-        customPath = NSBezierPath()
+        let customPath = NSBezierPath()
         
         // Start the custom path at given co-ordinates
-        customPath.move(to: vertices.first!)
+        customPath.move(to: NSPoint(x: CGFloat(vertices.first!.x) * CGFloat(scale), y: CGFloat(vertices.first!.y) * CGFloat(scale)))
         
         // Draw a line to each additional vertex
         for vertex in vertices.dropFirst() {
-            customPath.line(to: vertex)
+            customPath.line(to: NSPoint(x: CGFloat(vertex.x) * CGFloat(scale), y: CGFloat(vertex.y) * CGFloat(scale)))
         }
         
         // Draw a line back to the original vertex
-        customPath.line(to: vertices.first!)
+        customPath.line(to: NSPoint(x: CGFloat(vertices.first!.x) * CGFloat(scale), y: CGFloat(vertices.first!.y) * CGFloat(scale)))
         customPath.close()
         
         // Set the width
