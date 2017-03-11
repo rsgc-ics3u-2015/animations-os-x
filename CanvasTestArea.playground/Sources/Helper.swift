@@ -277,9 +277,6 @@ open class Canvas : CustomPlaygroundQuickLookable {
         return self.offscreenRep
     }
     
-    // Path for custom shapes
-    private var customPath : NSBezierPath
-    
     // Initialization of object based on this class
     public init(width: Int, height: Int, quality : Quality = Quality.Standard) {
         
@@ -305,9 +302,6 @@ open class Canvas : CustomPlaygroundQuickLookable {
         
         // Set the grpahics context to the offscreen bitmap
         NSGraphicsContext.setCurrent(NSGraphicsContext(bitmapImageRep: offscreenRep))
-        
-        // Set the path for custom shapes to nothing to start
-        self.customPath = NSBezierPath()
         
         // Make the background white
         self.fillColor = Color.white
