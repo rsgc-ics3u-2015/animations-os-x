@@ -632,9 +632,23 @@ open class Canvas : CustomPlaygroundQuickLookable {
      */
     open func copyToClipboard() {
         
+        // Clear the pasteboard
         let pasteBoard = NSPasteboard.general()
         pasteBoard.clearContents()
+        
+        // Save the current high performance state
+        let priorHighPerformanceState = self.highPerformance
+        
+        // If in high performance mode, temporarily disable
+        if self.highPerformance {
+            self.highPerformance = false
+        }
+        
+        // Copy contents of image to clipboard
         pasteBoard.writeObjects([self.privateImageView.image!])
+        
+        // Restore prior high performance state
+        self.highPerformance = priorHighPerformanceState
         
     }
     
