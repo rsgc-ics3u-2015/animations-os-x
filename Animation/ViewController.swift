@@ -60,7 +60,7 @@ class ViewController: NSViewController {
         }
     }
     
-    func timedDraw() {
+    @objc func timedDraw() {
         
         // Call the draw() method on the Sketch object
         sketch.draw()
@@ -71,8 +71,8 @@ class ViewController: NSViewController {
         // Get a Core Graphics representation of the current image on the canvas
         // and set it to the backing layer of the NSView object tied to the
         var imageRect : NSRect = NSMakeRect(0, 0, CGFloat(sketch.canvas.width), CGFloat(sketch.canvas.height))
-        NSGraphicsContext.setCurrent(NSGraphicsContext(bitmapImageRep: sketch.canvas.offscreenRepresentation))
-        self.view.layer!.contents = sketch.canvas.imageView.image?.cgImage(forProposedRect: &imageRect, context: NSGraphicsContext.current(), hints: nil)
+        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: sketch.canvas.offscreenRepresentation)
+        self.view.layer!.contents = sketch.canvas.imageView.image?.cgImage(forProposedRect: &imageRect, context: NSGraphicsContext.current, hints: nil)
         
     }
     

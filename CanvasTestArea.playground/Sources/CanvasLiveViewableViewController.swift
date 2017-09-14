@@ -14,7 +14,10 @@ class CanvasLiveViewableViewController: NSViewController {
     
     init(canvas : Canvas) {
         self.canvas = canvas
-        super.init(nibName: "CanvasLiveViewableViewController", bundle: nil)!
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    override func loadView() {
         self.view = canvas.imageView
     }
     
@@ -27,7 +30,7 @@ class CanvasLiveViewableViewController: NSViewController {
         
         // Do view setup here
         var imageRect : NSRect = NSMakeRect(0, 0, CGFloat(canvas.width), CGFloat(canvas.height))
-        self.view.layer!.contents = canvas.imageView.image?.cgImage(forProposedRect: &imageRect, context: NSGraphicsContext.current(), hints: nil)
+        self.view.layer!.contents = canvas.imageView.image?.cgImage(forProposedRect: &imageRect, context: NSGraphicsContext.current, hints: nil)
         
     }
     

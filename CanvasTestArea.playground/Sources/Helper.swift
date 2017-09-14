@@ -298,10 +298,10 @@ open class Canvas : CustomPlaygroundQuickLookable {
         self.privateImageView = NSImageView(frame: frameRect)
         
         // Define the offscreen bitmap we will draw to
-        offscreenRep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: self.width * self.scale, pixelsHigh: self.height * self.scale, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSCalibratedRGBColorSpace, bytesPerRow: 4 * self.width * self.scale, bitsPerPixel: 32)!
+        offscreenRep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: self.width * self.scale, pixelsHigh: self.height * self.scale, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSColorSpaceName.calibratedRGB, bytesPerRow: 4 * self.width * self.scale, bitsPerPixel: 32)!
         
         // Set the grpahics context to the offscreen bitmap
-        NSGraphicsContext.setCurrent(NSGraphicsContext(bitmapImageRep: offscreenRep))
+        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: offscreenRep)
         
         // Make the background white
         self.fillColor = Color.white
@@ -344,11 +344,11 @@ open class Canvas : CustomPlaygroundQuickLookable {
         let skew = 0.0
         
         // create dictionary with attributes of the string to be drawn
-        let attributes: [String : AnyObject] = [
-            NSForegroundColorAttributeName: fieldColor,
-            NSParagraphStyleAttributeName: paraStyle,
-            NSObliquenessAttributeName: skew as AnyObject,
-            NSFontAttributeName: fieldFont!
+        let attributes: [NSAttributedStringKey : AnyObject] = [
+            NSAttributedStringKey.foregroundColor: fieldColor,
+            NSAttributedStringKey.paragraphStyle: paraStyle,
+            NSAttributedStringKey.obliqueness: skew as AnyObject,
+            NSAttributedStringKey.font: fieldFont!
         ]
         
         // Draw the string
@@ -357,7 +357,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
     }
     
     // Draw a line on the image
-    open func drawLine(fromX: Int, fromY: Int, toX: Int, toY: Int, lineWidth: Int = 0, capStyle : NSLineCapStyle = NSLineCapStyle.squareLineCapStyle) {
+    open func drawLine(fromX: Int, fromY: Int, toX: Int, toY: Int, lineWidth: Int = 0, capStyle : NSBezierPath.LineCapStyle = NSBezierPath.LineCapStyle.squareLineCapStyle) {
         
         // Set attributes of shape based on the canvas scale factor
         var fromX = fromX
@@ -372,7 +372,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
         lineWidth *= scale
         
         // Make the new path with the specified cap style
-        NSBezierPath.setDefaultLineCapStyle(capStyle)
+        NSBezierPath.defaultLineCapStyle = capStyle
         let path = NSBezierPath()
         
         // Set width of border
@@ -633,7 +633,7 @@ open class Canvas : CustomPlaygroundQuickLookable {
     open func copyToClipboard() {
         
         // Clear the pasteboard
-        let pasteBoard = NSPasteboard.general()
+        let pasteBoard = NSPasteboard.general
         pasteBoard.clearContents()
         
         // Save the current high performance state
@@ -653,3 +653,4 @@ open class Canvas : CustomPlaygroundQuickLookable {
     }
     
 }
+
